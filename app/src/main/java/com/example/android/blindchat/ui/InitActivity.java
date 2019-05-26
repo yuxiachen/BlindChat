@@ -18,8 +18,8 @@ public class InitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_init);
 
-        logIn = (Button)findViewById(R.id.btn_log_in);
-        signUp = (Button)findViewById(R.id.btn_sign_up);
+        logIn = (Button)findViewById(R.id.btn_to_login);
+        signUp = (Button)findViewById(R.id.btn_to_signup);
 
         logIn.setOnClickListener(new View.OnClickListener() {
             @Override

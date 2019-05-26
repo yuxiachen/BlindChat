@@ -30,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
         loginBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                backToInit();
+                onBackPressed();
             }
         });
 
@@ -53,20 +53,15 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        login = (Button)findViewById(R.id.btn_log_in);
+        login = (Button)findViewById(R.id.btn_login);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toLogin();
+                toMain();
             }
         });
 
 
-    }
-
-    private void backToInit() {
-        Intent intent = new Intent(this, InitActivity.class);
-        startActivity(intent);
     }
 
     private void toSignup() {
@@ -77,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, PasswordResetActivity.class);
         startActivity(intent);
     }
-    private void toLogin() {
+    private void toMain() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
