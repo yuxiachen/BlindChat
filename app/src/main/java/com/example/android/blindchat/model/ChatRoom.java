@@ -16,7 +16,7 @@ public class ChatRoom {
         ArrayList<ChatItem> items;
         public class ChatItem {
             private String username;
-            private String chat;
+            private String message;
         }
     }
 }
