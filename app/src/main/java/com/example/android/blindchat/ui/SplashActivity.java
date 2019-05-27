@@ -8,26 +8,40 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.android.blindchat.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SplashActivity extends AppCompatActivity {
 
-
+    private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
-        logined();
-
+        checkUserData();
     }
 
-    //splash activity is the enter point of the app. Herein we check if the user has logged or not
-    // if yes, then go to the main activity
+    public void checkUserData(){
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        //The user has already signed in
+        if (currentUser != null) {
+            openHomeActivity();
+        }
+        //New user or the user is signed out
+        else {
+            openInitActivity();
+        }
+    }
 
-    public void logined(){
+    public void openInitActivity(){
         Intent intent = new Intent(this, InitActivity.class);
         startActivity(intent);
     }
 
+    public void openHomeActivity(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
 
 }
