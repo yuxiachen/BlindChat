@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">BlindChat</string>
+    <string name="most_popular_list">Most Popular</string>
+    <string-array name="array_most_popular">
+        <item>Topic A</item>
+        <item>Topic B</item>
+        <item>Topic C</item>
+    </string-array>
+    <string name="newest_list">Newest</string>
+    <string-array name="array_newest">
+        <item>Topic A</item>
+        <item>Topic B</item>
+        <item>Topic C</item>
+    </string-array>
 </resources>
