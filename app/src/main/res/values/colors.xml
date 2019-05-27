@@ -2,11 +2,12 @@
 <resources>
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#FFFFFF</color>
-    <color name="colorAccent">#2b79d6</color>
+    <color name="colorAccent">#2B79D6</color>
     <color name="colorAccentLight">#d0e8f8</color>
     <color name="colorAccentSecond">#fedb00</color>
     <color name="colorAccentSecondLight">#ffff00</color>
     <color name="textColorPrimary">#454545</color>
+    <color name="btn_tab_color">#f3f31d</color>
 
 </resources>
 
