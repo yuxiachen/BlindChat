@@ -1,6 +1,8 @@
 package com.example.android.blindchat.ui;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -19,6 +21,9 @@ import android.widget.ProgressBar;
 import com.example.android.blindchat.R;
 import com.example.android.blindchat.adapter.MessageAdapter;
 import com.example.android.blindchat.model.Message;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -41,6 +46,7 @@ public class ChatroomActivity extends AppCompatActivity {
     private String mUsername;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mMessageDatabaseReference;
+    private ChildEventListener mChildEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,14 +70,6 @@ public class ChatroomActivity extends AppCompatActivity {
 
         // Initialize progress bar
         //mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-
-        // ImagePickerButton shows an image picker to upload a image for a message
-        mPhotoPickerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO: Fire an intent to show an image picker
-            }
-        });
 
         // Enable Send button when there's text to send
         mMessageEditText.addTextChangedListener(new TextWatcher() {
@@ -98,12 +96,42 @@ public class ChatroomActivity extends AppCompatActivity {
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: Send messages on click
+                Message message = new Message(mMessageEditText.getText().toString());
+                mMessageDatabaseReference.push().setValue(message);
 
                 // Clear input box
                 mMessageEditText.setText("");
             }
         });
+        mChildEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Message message = dataSnapshot.getValue(Message.class);
+                mMessageAdapter.add(message);
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+        mMessageDatabaseReference.addChildEventListener(mChildEventListener);
     }
 /*
     @Override
