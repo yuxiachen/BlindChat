@@ -12,4 +12,12 @@
         <item>Topic B</item>
         <item>Topic C</item>
     </string-array>
+    <string name="search_list">Search Result</string>
+    <string-array name="array_search">
+        <item>Topic A</item>
+        <item>Topic B</item>
+        <item>Topic C</item>
+    </string-array>
+    <string name="joined_room_title">\u2022 Room</string>
+    <string name="three_dots">\u25AA\u25AA\u25AA</string>
 </resources>

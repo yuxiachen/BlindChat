@@ -1,5 +1,6 @@
 package com.example.android.blindchat.ui;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -14,10 +15,10 @@ public class MainActivity extends AppCompatActivity {
     //activity used to hold the navigation bar and the other five fragment
     // (Trendingfragment, SearchFragment, CreateChatroomFragment, JoinedRoomFragment, SettingFragment)
 
-    Button trending;
-    Button joined;
-    Button create;
-    Button settings;
+    private Button trending;
+    private Button joined;
+    private Button create;
+    private Button settings;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,6 +103,20 @@ public class MainActivity extends AppCompatActivity {
         joined.setBackgroundColor(Color.parseColor("#87ceeb"));
         create.setBackgroundColor(Color.parseColor("#87ceeb"));
         settings.setBackgroundColor(Color.parseColor("#87ceeb"));
+    }
+
+    public void toSearchFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        SearchFragment searchFragment = new SearchFragment();
+        transaction.replace(R.id.main_frame, searchFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    private void toRoomInfo(){
+        Intent intent = new Intent(this, ChatroomInfoActivity.class);
+        startActivity(intent);
     }
 
 }
