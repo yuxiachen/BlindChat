@@ -1,6 +1,8 @@
 package com.example.android.blindchat.model;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
     private String email;
     private String username;
 

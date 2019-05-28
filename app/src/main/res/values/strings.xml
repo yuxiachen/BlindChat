@@ -12,4 +12,11 @@
         <item>Topic B</item>
         <item>Topic C</item>
     </string-array>
+
+    <!--Error string -->
+    <string name="input_name_error">Please enter a valid username!</string>
+    <string name="input_password_error">Please enter a valid password!</string>
+    <string name="input_email_error">Please enter a valid email!</string>
+    <string name="input_password_not_consistent">The password you entered are different.</string>
+
 </resources>

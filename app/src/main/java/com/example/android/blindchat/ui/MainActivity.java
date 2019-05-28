@@ -2,6 +2,7 @@ package com.example.android.blindchat.ui;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.android.blindchat.R;
+import com.example.android.blindchat.model.User;
 
 public class MainActivity extends AppCompatActivity {
     //activity used to hold the navigation bar and the other five fragment
@@ -18,12 +20,13 @@ public class MainActivity extends AppCompatActivity {
     Button joined;
     Button create;
     Button settings;
+    private String TAG = "MainActivity";
+    private User user;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         TrendingFragment trendingFragment = new TrendingFragment();
@@ -96,6 +99,10 @@ public class MainActivity extends AppCompatActivity {
                 transaction.replace(R.id.main_frame, settingFragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
+
+
+
+
             }
         });
         trending.setBackgroundColor(Color.parseColor("#f3f31d"));
@@ -103,5 +110,25 @@ public class MainActivity extends AppCompatActivity {
         create.setBackgroundColor(Color.parseColor("#87ceeb"));
         settings.setBackgroundColor(Color.parseColor("#87ceeb"));
     }
+
+
+    /***
+     * Method to get the user info, can be used later*
+
+    DatabaseReference dbref = FirebaseDatabase.getInstance()
+            .getReference().child("Users");
+
+                dbref.addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            user = dataSnapshot.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .getValue(User.class);
+        }
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+        }
+    });
+     */
+
 
 }

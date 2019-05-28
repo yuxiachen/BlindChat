@@ -5,18 +5,22 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.blindchat.R;
+import com.example.android.blindchat.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
     private String TAG = "LoginActivity";
@@ -71,7 +75,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
     private void signInWithEmail(){
@@ -81,18 +84,16 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            toMain(user);
+                            toMain();
+
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.e(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(getApplicationContext(), "Authentication failed.",
+                            Toast.makeText(getApplicationContext(), task.getException().getMessage(),
                                     Toast.LENGTH_SHORT).show();
 
                         }
                     }
                 });
-        Log.e(TAG, "That is it");
     }
     private void toSignup() {
         Intent intent = new Intent(this, SignupActivity.class);
@@ -102,9 +103,8 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, PasswordResetActivity.class);
         startActivity(intent);
     }
-    private void toMain(FirebaseUser user) {
+    private void toMain() {
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("user", user);
         startActivity(intent);
     }
 }
