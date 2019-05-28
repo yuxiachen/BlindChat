@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.DataSetObserver;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
@@ -18,11 +19,11 @@ import java.util.List;
 
 import static java.security.AccessController.getContext;
 
-public class MessageAdapter implements ListAdapter {
+public class MessageAdapter extends ArrayAdapter<Message> {
     public MessageAdapter(Context context, int resource, List<Message> objects) {
         super(context, resource, objects);
     }
-
+/*
     @Override
     public void registerDataSetObserver(DataSetObserver observer) {
 
@@ -106,6 +107,7 @@ public class MessageAdapter implements ListAdapter {
     public boolean isEnabled(int position) {
         return false;
     }
+    */
 }
 
 
