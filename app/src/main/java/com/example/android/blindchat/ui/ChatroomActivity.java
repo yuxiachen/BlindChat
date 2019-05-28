@@ -96,7 +96,7 @@ public class ChatroomActivity extends AppCompatActivity {
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Message message = new Message(mMessageEditText.getText().toString());
+                Message message = new Message(mMessageEditText.getText().toString(), mUsername, null);
                 mMessageDatabaseReference.push().setValue(message);
 
                 // Clear input box
