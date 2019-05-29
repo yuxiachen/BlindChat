@@ -9,6 +9,7 @@ import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,7 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class SignupActivity extends AppCompatActivity {
 
     private String TAG = "SignUpActivity";
-    private Button signupBack;
+    private ImageButton signupBack;
     private TextInputEditText et_email;
     private TextInputEditText et_username;
     private TextInputEditText et_password;
@@ -43,7 +44,7 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         mAuth = FirebaseAuth.getInstance();
-        signupBack = (Button)findViewById(R.id.btn_signup_back);
+        signupBack = (ImageButton)findViewById(R.id.btn_signup_back);
         signupBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -19,4 +19,10 @@
     <string name="input_email_error">Please enter a valid email!</string>
     <string name="input_password_not_consistent">The password you entered are different.</string>
 
+    <string name="title_trending">Trending</string>
+    <string name="title_joined">Joined</string>
+    <string name="title_create">Create</string>
+    <string name="title_settings">Settings</string>
+
+
 </resources>

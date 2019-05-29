@@ -6,13 +6,14 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.android.blindchat.R;
 
 public class PasswordResetActivity extends AppCompatActivity {
 
-    Button pwResetBack;
+    ImageButton pwResetBack;
     TextInputEditText pwResetUsername;
     TextInputEditText pwResetEmail;
     Button sendEmail;
@@ -23,7 +24,7 @@ public class PasswordResetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password_reset);
 
-        pwResetBack = (Button)findViewById(R.id.btn_pw_reset_back);
+        pwResetBack = (ImageButton)findViewById(R.id.btn_pw_reset_back);
 
         pwResetBack.setOnClickListener(new View.OnClickListener() {
             @Override

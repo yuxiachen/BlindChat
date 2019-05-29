@@ -7,6 +7,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,7 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 public class LoginActivity extends AppCompatActivity {
     private String TAG = "LoginActivity";
     private FirebaseAuth mAuth;
-    private Button loginBack;
+    private ImageButton loginBack;
     private TextInputEditText loginEmail;
     private TextInputEditText loginPassword;
     private TextView signupLink;
@@ -39,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
 
-        loginBack = (Button)findViewById(R.id.btn_login_back);
+        loginBack = (ImageButton)findViewById(R.id.btn_login_back);
 
         loginBack.setOnClickListener(new View.OnClickListener() {
             @Override
