@@ -1,10 +1,12 @@
 package com.example.android.blindchat.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class User implements Serializable {
     private String email;
     private String username;
+    private ArrayList<Chatroom> joinedRoom;
 
     public User(){}
     public User(String email, String username) {
