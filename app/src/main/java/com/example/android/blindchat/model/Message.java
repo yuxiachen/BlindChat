@@ -1,11 +1,12 @@
 package com.example.android.blindchat.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Message implements Serializable {
     private String text;
     private String username;
-    private String photoUrl;
+    private long messagetime;
 
     public Message(){
 
@@ -13,7 +14,7 @@ public class Message implements Serializable {
     public Message(String text, String username, String photoUrl){
         this.text = text;
         this.username = username;
-        this.photoUrl = photoUrl;
+        messagetime = new Date().getTime();
     }
 
     public String getText() {
@@ -32,11 +33,11 @@ public class Message implements Serializable {
         this.username = username;
     }
 
-    public String getPhotoUrl() {
-        return photoUrl;
+    public long getMessagetime() {
+        return messagetime;
     }
 
-    public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
+    public void setMessagetime(long messagetime) {
+        this.messagetime = messagetime;
     }
 }

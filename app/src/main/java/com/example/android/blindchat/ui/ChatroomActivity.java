@@ -3,20 +3,16 @@ package com.example.android.blindchat.ui;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 
 import com.example.android.blindchat.R;
 import com.example.android.blindchat.adapter.MessageAdapter;
@@ -40,7 +36,7 @@ public class ChatroomActivity extends AppCompatActivity {
     private ListView mMessageListView;
     private MessageAdapter mMessageAdapter;
     private ImageButton mPhotoPickerButton;
-    private TextInputEditText mMessageEditText;
+    private EditText mMessageEditText;
     private Button mSendButton;
 
     private String mUsername;
@@ -51,7 +47,7 @@ public class ChatroomActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.fragment_chatroom);
 
         mUsername = ANONYMOUS;
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -59,13 +55,13 @@ public class ChatroomActivity extends AppCompatActivity {
         mMessageDatabaseReference = mFirebaseDatabase.getReference().child("chatroom-messages");
 
         // Initialize references to views
-        mMessageListView = (ListView) findViewById(R.id.chatroom_listview);
-        mMessageEditText = (TextInputEditText) findViewById(R.id.chatroom_textinput);
-        mSendButton = (Button) findViewById(R.id.chatroom_send_btn);
+        mMessageListView = (ListView) findViewById(R.id.reyclerview_message_list);
+        mMessageEditText = (EditText) findViewById(R.id.edittext_chatbox);
+        mSendButton = (Button) findViewById(R.id.button_chatbox_send);
 
         // Initialize message ListView and its adapter
         List<Message> chatMessages = new ArrayList<>();
-        mMessageAdapter = new MessageAdapter(this, R.layout.item_message_view, chatMessages);
+        mMessageAdapter = new MessageAdapter(this, R.layout.item_message_received, chatMessages);
         mMessageListView.setAdapter(mMessageAdapter);
 
         // Initialize progress bar
