@@ -68,7 +68,7 @@ public class ChatroomActivity extends AppCompatActivity {
         currentUserID = mAuth.getCurrentUser().getUid();
         UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
         GroupNameRef = FirebaseDatabase.getInstance().getReference().child("Chatrooms").child(currentChatName);
-/*
+
         InitializeFields();
 
         GetUserInfo();
@@ -82,9 +82,9 @@ public class ChatroomActivity extends AppCompatActivity {
 
                 mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
             }
-        });*/
+        });
     }
-/*
+
     @Override
     protected void onStart(){
         super.onStart();
@@ -199,5 +199,4 @@ public class ChatroomActivity extends AppCompatActivity {
             mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
         }
     }
-    */
 }
