@@ -11,10 +11,10 @@ public class Message implements Serializable {
     public Message(){
 
     }
-    public Message(String text, String username, String photoUrl){
+    public Message(String text, String username, String messagetime){
         this.text = text;
         this.username = username;
-        messagetime = new Date().getTime();
+        this.messagetime = new Date().getTime();
     }
 
     public String getText() {
