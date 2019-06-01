@@ -38,7 +38,7 @@ public class ChatroomFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstancestate){
-        chatroomFragmentView = inflater.inflate(R.layout.fragment_chatroom, container, false);
+        chatroomFragmentView = inflater.inflate(R.layout.fragment_joined, container, false);
         GroupRef = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
         InitializeFields();
         RetrieveAndDisplayRooms();
@@ -46,10 +46,10 @@ public class ChatroomFragment extends Fragment {
         list_view.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int postion, long id){
-                String currentRoomName = adapterView.getItemAtPosition(postion).toString();
+                String selectroom = adapterView.getItemAtPosition(postion).toString();
 
                 Intent roomChatIntent = new Intent(getContext(), ChatroomActivity.class);
-                roomChatIntent.putExtra("roomName", currentRoomName);
+                roomChatIntent.putExtra("selectroom", selectroom);
                 startActivity(roomChatIntent);
             }
         });

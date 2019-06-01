@@ -15,8 +15,8 @@ public class Chatroom implements Serializable {
     private int member_number = 1;
     private ArrayList<Message> chat_history;
     private ArrayList<User> joined_users;
-    public Chatroom(){
 
+    public Chatroom(){
     }
 
     public Chatroom(String name, String description, String created_at){
