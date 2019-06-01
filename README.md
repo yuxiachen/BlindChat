@@ -7,3 +7,5 @@ Our team got inspired by a popular platform: Blind.
 In Blind, employees would be able to share work-life balance, personal ideas and so on anonymously within the application.
 Based on that, we wants to develop a chat room application that provides student freedom to speak out and exchange ideas. The highlight is students can talk anonymously! 
 We will keep their true identity as a secret. We care how they think.
+
+Test
