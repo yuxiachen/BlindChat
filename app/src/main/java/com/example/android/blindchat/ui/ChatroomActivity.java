@@ -5,28 +5,17 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.InputFilter;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Display;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.blindchat.R;
-import com.example.android.blindchat.adapter.MessageAdapter;
 import com.example.android.blindchat.model.Chatroom;
-import com.example.android.blindchat.model.Message;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -36,26 +25,21 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 public class ChatroomActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
-    //private MessageAdapter mMessageAdapter;
     private EditText mMessageEditText;
     private ScrollView mScrollView;
     private TextView mMessageTextView;
     private ImageButton mSendButton;
 
-    //private String mUsername;
     private FirebaseAuth mAuth;
-    private DatabaseReference UsersRef, GroupNameRef, GroupMessageKeyRef;
+    private DatabaseReference usersRef, groupNameRef, groupMessageKeyRef;
     private String currentChatName, currentUserID, currentUserName, currentDate, currentTime;
-    //private ChildEventListener mChildEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +52,8 @@ public class ChatroomActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
-        UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
-        GroupNameRef = FirebaseDatabase.getInstance().getReference().child("Chatrooms").child(currentChatName);
+        usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        groupNameRef = FirebaseDatabase.getInstance().getReference().child("Chatrooms").child(currentChatName);
         InitializeFields();
 
         GetUserInfo();
@@ -89,8 +73,7 @@ public class ChatroomActivity extends AppCompatActivity {
     @Override
     protected void onStart(){
         super.onStart();
-
-        GroupNameRef.addChildEventListener(new ChildEventListener() {
+        groupNameRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 if(dataSnapshot.exists()){
@@ -120,28 +103,28 @@ public class ChatroomActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
     private void InitializeFields(){
-        mToolbar = (Toolbar) findViewById(R.id.group_chat_bar_layout);
+        mToolbar = findViewById(R.id.group_chat_bar_layout);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle(currentChatName);
 
-        mSendButton = (ImageButton) findViewById(R.id.send_message_button);
-        mMessageEditText = (EditText) findViewById(R.id.input_group_message);
-        mMessageTextView = (TextView) findViewById(R.id.group_chat_text_display);
-        mScrollView = (ScrollView) findViewById(R.id.my_scroll_view);
+        mSendButton =  findViewById(R.id.send_message_button);
+        mMessageEditText =  findViewById(R.id.input_group_message);
+        mMessageTextView =  findViewById(R.id.group_chat_text_display);
+        mScrollView =  findViewById(R.id.my_scroll_view);
     }
 
     private void GetUserInfo(){
-        UsersRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
+        usersRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
                 if (dataSnapshot.exists())
                 {
-                    currentUserName = dataSnapshot.child("name").getValue().toString();
+                    //currentUserName = dataSnapshot.child("name").getValue().toString();
+                    currentUserName = "Dummy user name";
                 }
             }
 
@@ -154,7 +137,7 @@ public class ChatroomActivity extends AppCompatActivity {
 
     private void SaveMessageInfoToDatabase(){
         String message = mMessageEditText.getText().toString();
-        String messagekEY = GroupNameRef.push().getKey();
+        String messagekEY = groupNameRef.push().getKey();
 
         if (TextUtils.isEmpty(message))
         {
@@ -172,16 +155,16 @@ public class ChatroomActivity extends AppCompatActivity {
 
 
             HashMap<String, Object> groupMessageKey = new HashMap<>();
-            GroupNameRef.updateChildren(groupMessageKey);
+            groupNameRef.updateChildren(groupMessageKey);
 
-            GroupMessageKeyRef = GroupNameRef.child(messagekEY);
+            groupMessageKeyRef = groupNameRef.child(messagekEY);
 
             HashMap<String, Object> messageInfoMap = new HashMap<>();
             messageInfoMap.put("name", currentUserName);
             messageInfoMap.put("message", message);
             messageInfoMap.put("date", currentDate);
             messageInfoMap.put("time", currentTime);
-            GroupMessageKeyRef.updateChildren(messageInfoMap);
+            groupMessageKeyRef.updateChildren(messageInfoMap);
         }
     }
 
