@@ -1,6 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:divider="?android:dividerVertical"
+    android:dividerPadding="8dp"
+    android:showDividers="middle">>
 
-</android.support.constraint.ConstraintLayout>
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:text="Account"
+        android:textSize="15dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Change Username"
+        android:id="@+id/change_username"
+        android:paddingLeft="30dp"
+        android:textAllCaps="false"
+        android:drawableEnd="@drawable/ic_chevron_right_black_24dp"
+        android:gravity="fill"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Change Password"
+        android:id="@+id/change_password"
+        android:paddingLeft="30dp"
+        android:textAllCaps="false"
+        android:drawableEnd="@drawable/ic_chevron_right_black_24dp"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:gravity="fill"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Log Out"
+        android:id="@+id/logout"
+        android:paddingLeft="30dp"
+        android:textAllCaps="false"
+        android:drawableEnd="@drawable/ic_chevron_right_black_24dp"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:gravity="fill"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:text="About"
+        android:textSize="15dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Application Version"
+        android:id="@+id/app_version"
+        android:paddingLeft="30dp"
+        android:textAllCaps="false"
+        android:drawableEnd="@drawable/ic_chevron_right_black_24dp"
+        android:gravity="fill"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Software Update"
+        android:id="@+id/software_update"
+        android:paddingLeft="30dp"
+        android:textAllCaps="false"
+        android:drawableEnd="@drawable/ic_chevron_right_black_24dp"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:gravity="fill"/>
+
+    <Button
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableEnd="@drawable/ic_chevron_right_black_24dp"
+        android:gravity="fill"
+        android:paddingLeft="30dp"
+        android:text="FQA"
+        android:textAllCaps="false" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:text="Notification"
+        android:textSize="15dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="xxxxxxxx"
+        android:paddingLeft="30dp"
+        android:textAllCaps="false"
+        android:drawableEnd="@drawable/ic_chevron_right_black_24dp"
+        android:gravity="fill"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="xxxxxxxx"
+        android:paddingLeft="30dp"
+        android:textAllCaps="false"
+        android:drawableEnd="@drawable/ic_chevron_right_black_24dp"
+        android:gravity="fill"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        />
+
+
+
+</LinearLayout>

@@ -39,25 +39,32 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             Fragment selectedFragment = null;
-
             switch (item.getItemId()) {
                 case R.id.navigation_trending:
                     selectedFragment = new TrendingFragment();
+                    replaceFragment(selectedFragment);
                     break;
                 case R.id.navigation_joined:
                     selectedFragment = new JoinedRoomFragment();
+                    replaceFragment(selectedFragment);
                     break;
                 case R.id.navigation_create:
                     selectedFragment = new CreateChatroomFragment();
+                    replaceFragment(selectedFragment);
                     break;
                 case R.id.navigation_settings:
                     selectedFragment = new SettingFragment();
+                    replaceFragment(selectedFragment);
                     break;
             }
 
-            getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, selectedFragment).commit();
-
             return true;
+        }
+        public void replaceFragment(Fragment selectedFragment){
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.main_frame, selectedFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
         }
     };
 

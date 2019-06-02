@@ -1,18 +1,83 @@
 package com.example.android.blindchat.ui;
 
+import android.content.Intent;
+import android.support.v7.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.android.blindchat.R;
 
 public class SettingFragment extends Fragment {
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, null);
+
+        Button changename = (Button)view.findViewById(R.id.change_username);
+        Button changepw = (Button)view.findViewById(R.id.change_password);
+        Button logout = (Button)view.findViewById(R.id.logout);
+
+        changename.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                ChangeUsernameFragment fragment = new ChangeUsernameFragment();
+                transaction.replace(R.id.main_frame,fragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+
+        changepw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                ChangePasswordFragment fragment = new ChangePasswordFragment();
+                transaction.replace(R.id.main_frame,fragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAlert();
+            }
+
+            private void showAlert() {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                dialog.setMessage("Are you sure you want to log out?");
+                dialog.setPositiveButton("LOG OUT", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(getActivity(),InitActivity.class);
+                        startActivity(intent);
+                    }
+                });
+                dialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                dialog.create();
+                dialog.show();
+
+            }
+        });
+
         return view;
     }
+
+
+
+
+
 }
