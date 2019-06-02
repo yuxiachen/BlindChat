@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.android.blindchat.R;
 import com.example.android.blindchat.model.Chatroom;
+import com.example.android.blindchat.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -123,8 +124,7 @@ public class ChatroomActivity extends AppCompatActivity {
             {
                 if (dataSnapshot.exists())
                 {
-                    //currentUserName = dataSnapshot.child("name").getValue().toString();
-                    currentUserName = "Dummy user name";
+                    currentUserName = dataSnapshot.getValue(User.class).getUsername();
                 }
             }
 
@@ -137,35 +137,31 @@ public class ChatroomActivity extends AppCompatActivity {
 
     private void SaveMessageInfoToDatabase(){
         String message = mMessageEditText.getText().toString();
-        String messagekEY = groupNameRef.push().getKey();
+        String messageKey = groupNameRef.push().getKey();
 
-        if (TextUtils.isEmpty(message))
-        {
+        if (TextUtils.isEmpty(message)) {
             Toast.makeText(this, "Please write message first...", Toast.LENGTH_SHORT).show();
+            return;
         }
-        else
-        {
-            Calendar calForDate = Calendar.getInstance();
-            SimpleDateFormat currentDateFormat = new SimpleDateFormat("MMM dd, yyyy");
-            currentDate = currentDateFormat.format(calForDate.getTime());
+        Calendar calForDate = Calendar.getInstance();
+        SimpleDateFormat currentDateFormat = new SimpleDateFormat("MMM dd, yyyy");
+        currentDate = currentDateFormat.format(calForDate.getTime());
 
-            Calendar calForTime = Calendar.getInstance();
-            SimpleDateFormat currentTimeFormat = new SimpleDateFormat("hh:mm a");
-            currentTime = currentTimeFormat.format(calForTime.getTime());
+        Calendar calForTime = Calendar.getInstance();
+        SimpleDateFormat currentTimeFormat = new SimpleDateFormat("hh:mm a");
+        currentTime = currentTimeFormat.format(calForTime.getTime());
 
+        HashMap<String, Object> groupMessageKey = new HashMap<>();
+        groupNameRef.updateChildren(groupMessageKey);
 
-            HashMap<String, Object> groupMessageKey = new HashMap<>();
-            groupNameRef.updateChildren(groupMessageKey);
+        groupMessageKeyRef = groupNameRef.child(messageKey);
 
-            groupMessageKeyRef = groupNameRef.child(messagekEY);
-
-            HashMap<String, Object> messageInfoMap = new HashMap<>();
-            messageInfoMap.put("name", currentUserName);
-            messageInfoMap.put("message", message);
-            messageInfoMap.put("date", currentDate);
-            messageInfoMap.put("time", currentTime);
-            groupMessageKeyRef.updateChildren(messageInfoMap);
-        }
+        HashMap<String, Object> messageInfoMap = new HashMap<>();
+        messageInfoMap.put("name", currentUserName);
+        messageInfoMap.put("message", message);
+        messageInfoMap.put("date", currentDate);
+        messageInfoMap.put("time", currentTime);
+        groupMessageKeyRef.updateChildren(messageInfoMap);
     }
 
     private void DisplayMessage(DataSnapshot dataSnapshot){
