@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.example.android.blindchat.R;
 import com.example.android.blindchat.adapter.MessageAdapter;
+import com.example.android.blindchat.model.Chatroom;
 import com.example.android.blindchat.model.Message;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -61,14 +62,14 @@ public class ChatroomActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_chatroom);
 
-        currentChatName = getIntent().getExtras().get("selectroom").toString();
+        Chatroom chatroom = (Chatroom) getIntent().getExtras().getSerializable("chatroom");
+        currentChatName = chatroom.getName();
         Toast.makeText(ChatroomActivity.this, currentChatName, Toast.LENGTH_SHORT).show();
 
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
         UsersRef = FirebaseDatabase.getInstance().getReference().child("Users");
         GroupNameRef = FirebaseDatabase.getInstance().getReference().child("Chatrooms").child(currentChatName);
-
         InitializeFields();
 
         GetUserInfo();
