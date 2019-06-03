@@ -14,13 +14,18 @@ import com.example.android.blindchat.R;
 
 
 public class MainActivity extends AppCompatActivity {
+    private Fragment selectedFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        if (selectedFragment == null) {
+            selectedFragment = new TrendingFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.add(R.id.main_frame, selectedFragment);
+        }
     }
 
 
@@ -29,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment selectedFragment = null;
             switch (item.getItemId()) {
                 case R.id.navigation_trending:
                     selectedFragment = new TrendingFragment();

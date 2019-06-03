@@ -19,15 +19,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:paddingStart="10dp"
+        android:layout_marginLeft="10dp"
         android:text="Most Popular"
         android:textSize="36sp" />
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/list_most_popular"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="5" />
+        android:layout_weight="5"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"/>
 
     <TextView
         android:id="@+id/textView6"
@@ -38,10 +40,12 @@
         android:text="Newest"
         android:textSize="36sp" />
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/list_newest"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="5" />
+        android:layout_weight="5"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"/>
 
 </LinearLayout>

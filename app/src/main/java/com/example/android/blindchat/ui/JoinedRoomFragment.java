@@ -3,7 +3,6 @@ package com.example.android.blindchat.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.ListView;
 
 import com.example.android.blindchat.R;
 import com.example.android.blindchat.adapter.JoinedRoomAdapter;
-import com.example.android.blindchat.model.Chatroom;
 import com.example.android.blindchat.model.Chatroom;
 import com.example.android.blindchat.model.JoinedRoom;
 
@@ -31,7 +29,7 @@ public class JoinedRoomFragment extends Fragment {
 
         list = loadList();
 
-        JoinedRoomAdapter adapter = new JoinedRoomAdapter(view.getContext(), R.layout.joined_list_item, list);
+        JoinedRoomAdapter adapter = new JoinedRoomAdapter(view.getContext(), R.layout.item_joined_room, list);
         ListView listView = (ListView)view.findViewById(R.id.joined_room_listview);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
