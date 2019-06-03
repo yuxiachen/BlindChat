@@ -25,6 +25,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@android:color/transparent"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:text="@string/three_dots" />
     </LinearLayout>
 

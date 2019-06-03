@@ -22,6 +22,8 @@ public class SettingFragment extends Fragment {
         Button changename = (Button)view.findViewById(R.id.change_username);
         Button changepw = (Button)view.findViewById(R.id.change_password);
         Button logout = (Button)view.findViewById(R.id.logout);
+        Button appVersion = (Button)view.findViewById(R.id.app_version);
+        Button update = (Button)view.findViewById(R.id.software_update);
 
         changename.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,6 +72,34 @@ public class SettingFragment extends Fragment {
                 dialog.create();
                 dialog.show();
 
+            }
+        });
+
+        appVersion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                        .setTitle("Application Version")
+                        .setMessage("Beta 1.0")
+                        .setCancelable(false)
+                        .create();
+
+                alertDialog.show();
+                alertDialog.setCanceledOnTouchOutside(true);
+            }
+        });
+
+        update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                        .setTitle("New Updates")
+                        .setMessage(R.string.New_Updates)
+                        .setCancelable(false)
+                        .create();
+
+                alertDialog.show();
+                alertDialog.setCanceledOnTouchOutside(true);
             }
         });
 
