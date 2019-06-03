@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -39,7 +38,7 @@ public class ChatroomActivity extends AppCompatActivity {
     private ImageButton mSendButton;
 
     private FirebaseAuth mAuth;
-    private DatabaseReference usersRef, groupNameRef, groupMessageKeyRef;
+    private DatabaseReference usersRef, chatRoomRef, chatRoomMessagesRef;
     private String currentChatName, currentUserID, currentUserName, currentDate, currentTime;
 
     @Override
@@ -54,7 +53,8 @@ public class ChatroomActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
         usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
-        groupNameRef = FirebaseDatabase.getInstance().getReference().child("Chatrooms").child(currentChatName);
+        chatRoomRef = FirebaseDatabase.getInstance().getReference().child("Chatrooms/" + currentChatName);
+        chatRoomMessagesRef = chatRoomRef.child("messages");
         InitializeFields();
 
         GetUserInfo();
@@ -62,6 +62,7 @@ public class ChatroomActivity extends AppCompatActivity {
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String message = mMessageEditText.getText().toString();
                 SaveMessageInfoToDatabase();
 
                 mMessageEditText.setText("");
@@ -74,7 +75,7 @@ public class ChatroomActivity extends AppCompatActivity {
     @Override
     protected void onStart(){
         super.onStart();
-        groupNameRef.addChildEventListener(new ChildEventListener() {
+        chatRoomMessagesRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 if(dataSnapshot.exists()){
@@ -106,7 +107,7 @@ public class ChatroomActivity extends AppCompatActivity {
         });
     }
 
-    private void InitializeFields(){
+    private void InitializeFields() {
         mToolbar = findViewById(R.id.group_chat_bar_layout);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle(currentChatName);
@@ -137,7 +138,7 @@ public class ChatroomActivity extends AppCompatActivity {
 
     private void SaveMessageInfoToDatabase(){
         String message = mMessageEditText.getText().toString();
-        String messageKey = groupNameRef.push().getKey();
+        String messageKey = chatRoomRef.child("messages").push().getKey();
 
         if (TextUtils.isEmpty(message)) {
             Toast.makeText(this, "Please write message first...", Toast.LENGTH_SHORT).show();
@@ -151,10 +152,7 @@ public class ChatroomActivity extends AppCompatActivity {
         SimpleDateFormat currentTimeFormat = new SimpleDateFormat("hh:mm a");
         currentTime = currentTimeFormat.format(calForTime.getTime());
 
-        HashMap<String, Object> groupMessageKey = new HashMap<>();
-        groupNameRef.updateChildren(groupMessageKey);
-
-        groupMessageKeyRef = groupNameRef.child(messageKey);
+        DatabaseReference groupMessageKeyRef = chatRoomRef.child("messages").child(messageKey);
 
         HashMap<String, Object> messageInfoMap = new HashMap<>();
         messageInfoMap.put("name", currentUserName);
