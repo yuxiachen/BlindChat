@@ -21,10 +21,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        // add need to add a fragment when create the activity
         if (selectedFragment == null) {
             selectedFragment = new TrendingFragment();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.add(R.id.main_frame, selectedFragment);
+            transaction.commit();
         }
     }
 
