@@ -28,15 +28,15 @@
             android:theme="@style/AppTheme"/>
         <activity
             android:name=".ui.LoginActivity"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppThemeWithActionBar"/>
         <activity android:name=".ui.SignupActivity"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppThemeWithActionBar"/>
         <activity android:name=".ui.PasswordResetActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppThemeWithActionBar"/>
         <activity android:name=".ui.MainActivity"
             android:theme="@style/AppTheme" />
         <activity android:name=".ui.ChatroomActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppThemeWithActionBar" />
         <activity android:name=".ui.ChatroomInfoActivity"
             android:theme="@style/AppTheme" />
     </application>

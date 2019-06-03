@@ -3,9 +3,10 @@ package com.example.android.blindchat.ui;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -28,12 +29,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Iterator;
 
 public class ChatroomActivity extends AppCompatActivity {
 
-    private Toolbar mToolbar;
+    private ActionBar mActionBar;
     private EditText mMessageEditText;
     private ScrollView mScrollView;
     private TextView mMessageTextView;
@@ -113,9 +113,10 @@ public class ChatroomActivity extends AppCompatActivity {
     }
 
     private void InitializeFields() {
-        mToolbar = findViewById(R.id.group_chat_bar_layout);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle(currentChatName);
+        mActionBar = getSupportActionBar();
+        mActionBar.setTitle(currentChatName);
+        mActionBar.setHomeButtonEnabled(true);
+        mActionBar.setDisplayHomeAsUpEnabled(true);
 
         mSendButton =  findViewById(R.id.send_message_button);
         mMessageEditText =  findViewById(R.id.input_group_message);
@@ -173,6 +174,17 @@ public class ChatroomActivity extends AppCompatActivity {
             mMessageTextView.append(chatName + " :\n" + chatMessage + "\n" + chatTime + "     " + chatDate + "\n\n\n");
 
             mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

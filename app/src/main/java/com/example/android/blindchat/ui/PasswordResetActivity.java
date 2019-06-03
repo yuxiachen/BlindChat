@@ -3,20 +3,20 @@ package com.example.android.blindchat.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.example.android.blindchat.R;
 
 public class PasswordResetActivity extends AppCompatActivity {
 
-    ImageButton pwResetBack;
-    TextInputEditText pwResetUsername;
-    TextInputEditText pwResetEmail;
-    Button sendEmail;
+    private TextInputEditText pwResetUsername;
+    private TextInputEditText pwResetEmail;
+    private Button sendEmail;
+    private ActionBar mActionBar;
 
 
     @Override
@@ -24,14 +24,10 @@ public class PasswordResetActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password_reset);
 
-        pwResetBack = (ImageButton)findViewById(R.id.btn_pw_reset_back);
-
-        pwResetBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        mActionBar = getSupportActionBar();
+        mActionBar.setTitle("Sign Up");
+        mActionBar.setHomeButtonEnabled(true);
+        mActionBar.setDisplayHomeAsUpEnabled(true);
 
         pwResetUsername = (TextInputEditText)findViewById(R.id.pw_reset_username);
         pwResetEmail = (TextInputEditText)findViewById(R.id.pw_reset_email);
@@ -49,5 +45,16 @@ public class PasswordResetActivity extends AppCompatActivity {
     private void toInit() {
         Intent intent = new Intent(this, InitActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

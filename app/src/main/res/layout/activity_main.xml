@@ -9,10 +9,12 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="63dp"
-        android:id="@+id/main_frame"/>
+        android:id="@+id/main_frame"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/nav_view"/>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/nav_view"

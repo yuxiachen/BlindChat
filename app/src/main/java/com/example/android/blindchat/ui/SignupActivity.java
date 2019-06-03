@@ -4,12 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +25,6 @@ import com.google.firebase.database.FirebaseDatabase;
 public class SignupActivity extends AppCompatActivity {
 
     private String TAG = "SignUpActivity";
-    private ImageButton signupBack;
     private TextInputEditText et_email;
     private TextInputEditText et_username;
     private TextInputEditText et_password;
@@ -37,6 +37,7 @@ public class SignupActivity extends AppCompatActivity {
     private String password;
     private String passwordConfirm;
     private Boolean isValidInput;
+    private ActionBar mActionBar;
 
 
     @Override
@@ -44,13 +45,11 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         mAuth = FirebaseAuth.getInstance();
-        signupBack = (ImageButton)findViewById(R.id.btn_signup_back);
-        signupBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+
+        mActionBar = getSupportActionBar();
+        mActionBar.setTitle("Log in");
+        mActionBar.setHomeButtonEnabled(true);
+        mActionBar.setDisplayHomeAsUpEnabled(true);
 
         et_email = (TextInputEditText)findViewById(R.id.signup_email_input);
         et_username = (TextInputEditText)findViewById(R.id.signup_username_input);
@@ -150,5 +149,14 @@ public class SignupActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
