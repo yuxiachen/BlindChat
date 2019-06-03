@@ -18,6 +18,7 @@
         <activity android:name=".ui.PasswordResetActivity"></activity>
         <activity android:name=".ui.MainActivity"></activity>
         <activity android:name=".ui.ChatroomActivity"></activity>
+        <activity android:name=".ui.ChatroomInfoActivity"></activity>
 
         <activity
             android:name=".ui.SplashActivity"
