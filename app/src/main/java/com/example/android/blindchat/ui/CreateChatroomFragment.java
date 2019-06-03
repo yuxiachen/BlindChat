@@ -65,29 +65,20 @@ public class CreateChatroomFragment extends Fragment {
         return isValid;
     }
 
-    private void createChatroomOnFirebase(Chatroom newChatroom) {
-        DatabaseReference chatRoomRef = FirebaseDatabase.getInstance().getReference().child("Chatrooms/" + newChatroom.getName());
-        chatRoomRef.child("latitude").setValue(newChatroom.getLatitude());
-        chatRoomRef.child("longitude").setValue(newChatroom.getLongitude());
-        chatRoomRef.child("member_number").setValue("1");
-        chatRoomRef.child("description").setValue(newChatroom.getDescription());
-        chatRoomRef.child("name").setValue(newChatroom.getName());
-    }
-
     private void createNewChatroom() {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
         String currTime = simpleDateFormat.format(new Date());
         final Chatroom newChatroom = new Chatroom(topic, description, currTime);
 
-        FirebaseDatabase.getInstance().getReference("Chatrooms").push().setValue(newChatroom)
+        final DatabaseReference newRoomRef = FirebaseDatabase.getInstance().getReference("Chatrooms").push();
+        newRoomRef.setValue(newChatroom)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            createChatroomOnFirebase(newChatroom);
                             Toast.makeText(getActivity(), "Chatroom created!", Toast.LENGTH_LONG).show();
-                            openChatroom(newChatroom);
+                            openChatroom(newChatroom, newRoomRef.getKey());
                         } else {
                             Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         }
@@ -95,9 +86,10 @@ public class CreateChatroomFragment extends Fragment {
                 });
     }
 
-    private void openChatroom(Chatroom chatroom) {
+    private void openChatroom(Chatroom chatroom, String key) {
         Intent intent = new Intent(getActivity(), ChatroomActivity.class);
         intent.putExtra("chatroom", chatroom);
+        intent.putExtra("key", key);
         startActivity(intent);
     }
 

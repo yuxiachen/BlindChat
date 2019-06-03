@@ -47,13 +47,14 @@ public class ChatroomActivity extends AppCompatActivity {
         setContentView(R.layout.fragment_chatroom);
 
         Chatroom chatroom = (Chatroom) getIntent().getExtras().getSerializable("chatroom");
+        String key = (String)getIntent().getExtras().getSerializable("key");
         currentChatName = chatroom.getName();
         Toast.makeText(ChatroomActivity.this, currentChatName, Toast.LENGTH_SHORT).show();
 
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
         usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
-        chatRoomRef = FirebaseDatabase.getInstance().getReference().child("Chatrooms/" + currentChatName);
+        chatRoomRef = FirebaseDatabase.getInstance().getReference().child("Chatrooms/" + key);
         chatRoomMessagesRef = chatRoomRef.child("messages");
         InitializeFields();
 
