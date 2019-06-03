@@ -36,7 +36,9 @@ public class TrendingFragment extends Fragment implements ChatroomAdapter.OnRoom
     private ChatroomAdapter popularRoomListAdapter;
     private ChatroomAdapter newestRoomListAdapter;
     private ArrayList<Chatroom> popularChatrooms;
+    private ArrayList<String> popularChatroomKeys;
     private ArrayList<Chatroom> newestChatrooms;
+    private ArrayList<String> newestChatroomKeys;
     private DatabaseReference dfChatroom;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -74,14 +76,16 @@ public class TrendingFragment extends Fragment implements ChatroomAdapter.OnRoom
         mostPopularList.setHasFixedSize(true);
         mostPopularList.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         popularChatrooms = new ArrayList<>();
-        popularRoomListAdapter = new ChatroomAdapter(popularChatrooms, this);
+        popularChatroomKeys = new ArrayList<>();
+        popularRoomListAdapter = new ChatroomAdapter(popularChatrooms, popularChatroomKeys, this);
         mostPopularList.setAdapter(popularRoomListAdapter);
 
         newestList = view.findViewById(R.id.list_newest);
         newestList.setHasFixedSize(true);
         newestList.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         newestChatrooms = new ArrayList<>();
-        newestRoomListAdapter = new ChatroomAdapter(newestChatrooms, this);
+        newestChatroomKeys = new ArrayList<>();
+        newestRoomListAdapter = new ChatroomAdapter(newestChatrooms, newestChatroomKeys, this);
         newestList.setAdapter(newestRoomListAdapter);
 
 
@@ -89,9 +93,7 @@ public class TrendingFragment extends Fragment implements ChatroomAdapter.OnRoom
         popularQuery.addListenerForSingleValueEvent(popularChatroomEventListener);
 
         Query newestQuery = FirebaseDatabase.getInstance().getReference("Chatrooms").orderByChild("created_at");
-        Log.e("bbb", "SIZE IS: " + Integer.toString(newestChatrooms.size()));
         newestQuery.addListenerForSingleValueEvent(newestChatroomEventListener);
-        Log.e("bbb", "after SIZE IS: " + Integer.toString(newestChatrooms.size()));
         return view;
     }
 
@@ -99,10 +101,13 @@ public class TrendingFragment extends Fragment implements ChatroomAdapter.OnRoom
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             popularChatrooms.clear();
+            popularChatroomKeys.clear();
             if (dataSnapshot.exists()) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Chatroom chatroom = snapshot.getValue(Chatroom.class);
+                    String key = snapshot.getKey();
                     popularChatrooms.add(chatroom);
+                    popularChatroomKeys.add(key);
                 }
                 popularRoomListAdapter.notifyDataSetChanged();
             }
@@ -118,10 +123,13 @@ public class TrendingFragment extends Fragment implements ChatroomAdapter.OnRoom
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             newestChatrooms.clear();
+            newestChatroomKeys.clear();
             if (dataSnapshot.exists()) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Chatroom chatroom = snapshot.getValue(Chatroom.class);
+                    String key = snapshot.getKey();
                     newestChatrooms.add(chatroom);
+                    newestChatroomKeys.add(key);
                 }
                 newestRoomListAdapter.notifyDataSetChanged();
             }
@@ -133,14 +141,15 @@ public class TrendingFragment extends Fragment implements ChatroomAdapter.OnRoom
         }
     };
 
-    private void openChatroomActivity(Chatroom chatroom) {
+    private void openChatroomActivity(Chatroom chatroom, String key) {
         Intent intent = new Intent(getActivity(), ChatroomActivity.class);
         intent.putExtra("chatroom", chatroom);
+        intent.putExtra("key", key);
         startActivity(intent);
     }
 
     @Override
-    public void OnRoomItemClicked(Chatroom chatroom) {
-        openChatroomActivity(chatroom);
+    public void OnRoomItemClicked(Chatroom chatroom, String key) {
+        openChatroomActivity(chatroom, key);
     }
 }

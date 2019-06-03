@@ -75,17 +75,12 @@ public class CreateChatroomFragment extends Fragment {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Log.e("AAA", "how is the task?");
                         if (task.isSuccessful()) {
-                            Log.e("AAA", "successful?");
                             Toast.makeText(getActivity(), "Chatroom created!", Toast.LENGTH_LONG).show();
-
                             openChatroom(newChatroom, newRoomRef.getKey());
                         } else {
-                            Log.e("AAA", "failure?");
                             Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         }
-                        Log.e("AAA", "i don't know?");
                     }
                 });
     }

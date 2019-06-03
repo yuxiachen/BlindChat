@@ -15,9 +15,11 @@ import java.util.ArrayList;
 public class ChatroomAdapter extends RecyclerView.Adapter<ChatroomAdapter.RoomItemViewHolder> implements View.OnClickListener{
     private OnRoomItemClickedListener mListener;
     private ArrayList<Chatroom> mRoomList;
+    private ArrayList<String> mRoomKeys;
 
-    public ChatroomAdapter(ArrayList<Chatroom> chatrooms, OnRoomItemClickedListener listener) {
+    public ChatroomAdapter(ArrayList<Chatroom> chatrooms, ArrayList<String> keys, OnRoomItemClickedListener listener) {
         mRoomList = chatrooms;
+        mRoomKeys = keys;
         mListener = listener;
     }
 
@@ -44,7 +46,7 @@ public class ChatroomAdapter extends RecyclerView.Adapter<ChatroomAdapter.RoomIt
     @Override
     public void onClick(View v) {
         int position = ((RecyclerView) v.getParent()).getChildAdapterPosition(v);
-        mListener.OnRoomItemClicked(mRoomList.get(position));
+        mListener.OnRoomItemClicked(mRoomList.get(position), mRoomKeys.get(position));
     }
 
     public static class RoomItemViewHolder extends RecyclerView.ViewHolder{
@@ -65,6 +67,6 @@ public class ChatroomAdapter extends RecyclerView.Adapter<ChatroomAdapter.RoomIt
     }
 
     public interface OnRoomItemClickedListener{
-        void OnRoomItemClicked(Chatroom chatroom);
+        void OnRoomItemClicked(Chatroom chatroom, String key);
     }
 }
