@@ -57,7 +57,7 @@ public class ChatroomFragment extends Fragment {
     }
 
     private void InitializeFields(){
-        list_view = (ListView) chatroomFragmentView.findViewById(R.id.list_joined_room);
+        list_view = (ListView) chatroomFragmentView.findViewById(R.id.joined_room_listview);
         list_view.setAdapter(arrayAdapter);
     }
 

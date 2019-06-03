@@ -45,7 +45,7 @@ public class TrendingFragment extends Fragment {
         searchInTrending.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                toSearchFragment();
+                ((MainActivity)getActivity()).toSearchFragment();
                 return false;
             }
 
@@ -70,12 +70,5 @@ public class TrendingFragment extends Fragment {
         return view;
     }
 
-    private void toSearchFragment() {
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        SearchFragment searchFragment = new SearchFragment();
-        transaction.replace(R.id.main_frame, searchFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
+
 }
