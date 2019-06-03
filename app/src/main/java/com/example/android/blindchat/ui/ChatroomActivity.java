@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.android.blindchat.R;
 import com.example.android.blindchat.model.Chatroom;
+import com.example.android.blindchat.model.Message;
 import com.example.android.blindchat.model.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -25,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -37,6 +39,7 @@ public class ChatroomActivity extends AppCompatActivity {
     private TextView mMessageTextView;
     private ImageButton mSendButton;
 
+    private Chatroom mChatroom;
     private FirebaseAuth mAuth;
     private DatabaseReference usersRef, chatRoomRef, chatRoomMessagesRef;
     private String currentChatName, currentUserID, currentUserName, currentDate, currentTime;
@@ -46,16 +49,18 @@ public class ChatroomActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_chatroom);
 
-        Chatroom chatroom = (Chatroom) getIntent().getExtras().getSerializable("chatroom");
+        mChatroom = (Chatroom) getIntent().getExtras().getSerializable("chatroom");
+        mChatroom.setChat_history(new ArrayList<Message>());
+
         String key = (String)getIntent().getExtras().getSerializable("key");
-        currentChatName = chatroom.getName();
+        currentChatName = mChatroom.getName();
         Toast.makeText(ChatroomActivity.this, currentChatName, Toast.LENGTH_SHORT).show();
 
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
         usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
         chatRoomRef = FirebaseDatabase.getInstance().getReference().child("Chatrooms/" + key);
-        chatRoomMessagesRef = chatRoomRef.child("messages");
+        chatRoomMessagesRef = chatRoomRef.child("chat_history");
         InitializeFields();
 
         GetUserInfo();
@@ -63,8 +68,7 @@ public class ChatroomActivity extends AppCompatActivity {
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String message = mMessageEditText.getText().toString();
-                SaveMessageInfoToDatabase();
+                SaveMessageInfoToDatabase(mMessageEditText.getText().toString());
 
                 mMessageEditText.setText("");
 
@@ -137,11 +141,8 @@ public class ChatroomActivity extends AppCompatActivity {
         });
     }
 
-    private void SaveMessageInfoToDatabase(){
-        String message = mMessageEditText.getText().toString();
-        String messageKey = chatRoomRef.child("messages").push().getKey();
-
-        if (TextUtils.isEmpty(message)) {
+    private void SaveMessageInfoToDatabase(String message_text){
+        if (TextUtils.isEmpty(message_text)) {
             Toast.makeText(this, "Please write message first...", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -153,14 +154,10 @@ public class ChatroomActivity extends AppCompatActivity {
         SimpleDateFormat currentTimeFormat = new SimpleDateFormat("hh:mm a");
         currentTime = currentTimeFormat.format(calForTime.getTime());
 
-        DatabaseReference groupMessageKeyRef = chatRoomRef.child("messages").child(messageKey);
 
-        HashMap<String, Object> messageInfoMap = new HashMap<>();
-        messageInfoMap.put("name", currentUserName);
-        messageInfoMap.put("message", message);
-        messageInfoMap.put("date", currentDate);
-        messageInfoMap.put("time", currentTime);
-        groupMessageKeyRef.updateChildren(messageInfoMap);
+        Message message = new Message( message_text, currentTime, currentDate, currentUserName);
+        mChatroom.getChat_history().add(message);
+        chatRoomRef.setValue(mChatroom);
     }
 
     private void DisplayMessage(DataSnapshot dataSnapshot){
