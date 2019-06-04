@@ -48,6 +48,10 @@ public class PasswordResetActivity extends AppCompatActivity {
         sendEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (pwResetEmail.length()==0){
+                    Toast.makeText(getApplicationContext(),"Please enter email",Toast.LENGTH_LONG).show();
+                }
+                else
                 resetUserPassword();
             }
         });
