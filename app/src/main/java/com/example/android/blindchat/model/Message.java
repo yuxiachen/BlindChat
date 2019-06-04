@@ -6,6 +6,10 @@ import java.util.Date;
 public class Message implements Serializable {
     private String message, time, date, name;
 
+    //for notification title
+    private String roomName;
+    private Chatroom chatroom;
+
     public Message(){
 
     }
@@ -15,6 +19,16 @@ public class Message implements Serializable {
         this.time = time;
         this.date = date;
         this.name = name;
+    }
+
+    //constructor with room name for notification activity
+    public Message(String message, String time, String date, String name, String rName, Chatroom cRoom) {
+        this.message = message;
+        this.time = time;
+        this.date = date;
+        this.name = name;
+        this.roomName = rName;
+        this.chatroom = cRoom;
     }
 
     public String getMessage() {
@@ -48,4 +62,24 @@ public class Message implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
+    //for notification
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String rName) {
+        this.roomName = rName;
+    }
+
+    //return new chatroom here need to be fixed
+    public Chatroom getRoom() {
+        return new Chatroom();
+    }
+
+    public void setRoom(Chatroom cRoom) {
+        this.chatroom = cRoom;
+    }
+
+
 }

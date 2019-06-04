@@ -13,6 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round_shadow"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ui.NotificationActivity"></activity>
         <activity
             android:name=".ui.SplashActivity"
             android:theme="@style/AppSplashTheme">
@@ -22,22 +23,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.InitActivity"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".ui.LoginActivity"
-            android:theme="@style/AppThemeWithActionBar"/>
-        <activity android:name=".ui.SignupActivity"
-            android:theme="@style/AppThemeWithActionBar"/>
-        <activity android:name=".ui.PasswordResetActivity"
-            android:theme="@style/AppThemeWithActionBar"/>
-        <activity android:name=".ui.MainActivity"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".ui.ChatroomActivity"
             android:theme="@style/AppThemeWithActionBar" />
-        <activity android:name=".ui.ChatroomInfoActivity"
+        <activity
+            android:name=".ui.SignupActivity"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name=".ui.PasswordResetActivity"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name=".ui.MainActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.ChatroomActivity"
+            android:theme="@style/AppThemeWithActionBar" />
+        <activity
+            android:name=".ui.ChatroomInfoActivity"
             android:theme="@style/AppTheme" />
     </application>
 

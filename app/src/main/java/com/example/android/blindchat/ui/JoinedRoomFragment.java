@@ -23,8 +23,6 @@ import java.util.ArrayList;
 
 public class JoinedRoomFragment extends Fragment implements ChatroomAdapter.OnRoomItemClickedListener{
 
-    private static final String TAG = "debugging joinedroom";
-
     private RecyclerView recyclerView;
     private ChatroomAdapter joinedRoomAdapter;
 
@@ -46,6 +44,7 @@ public class JoinedRoomFragment extends Fragment implements ChatroomAdapter.OnRo
         joinedRooms = new ArrayList<>();
         joinedRoomKeys = new ArrayList<>();
         joinedRoomAdapter = new ChatroomAdapter(joinedRooms, joinedRoomKeys, this);
+
         recyclerView.setAdapter(joinedRoomAdapter);
         Query query = FirebaseDatabase.getInstance().getReference("Chatrooms");
         query.addListenerForSingleValueEvent(joinedRoomValueEventListener);

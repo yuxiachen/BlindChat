@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -50,6 +51,7 @@ public class ChatroomActivity extends AppCompatActivity {
         setContentView(R.layout.fragment_chatroom);
 
         mChatroom = (Chatroom) getIntent().getExtras().getSerializable("chatroom");
+
         mChatroom.setChat_history(new ArrayList<Message>());
 
         String key = (String)getIntent().getExtras().getSerializable("key");
