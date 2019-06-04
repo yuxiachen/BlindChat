@@ -72,15 +72,14 @@ public class NewestRoomFragment extends Fragment implements ChatroomAdapter.OnRo
         }
     };
 
-    private void openChatroomActivity(Chatroom chatroom, String key) {
+    private void openChatroomActivity(String key) {
         Intent intent = new Intent(getActivity(), ChatroomActivity.class);
-        intent.putExtra("chatroom", chatroom);
         intent.putExtra("key", key);
         startActivity(intent);
     }
 
     @Override
-    public void OnRoomItemClicked(Chatroom chatroom, String key) {
-        openChatroomActivity(chatroom, key);
+    public void OnRoomItemClicked(String key) {
+        openChatroomActivity(key);
     }
 }
