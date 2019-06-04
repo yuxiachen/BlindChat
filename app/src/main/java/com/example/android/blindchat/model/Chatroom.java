@@ -13,8 +13,8 @@ public class Chatroom implements Serializable {
     private float latitude;
     private String created_at;
     private int member_number = 1;
-    private ArrayList<Message> chat_history;
-    private ArrayList<User> joined_users;
+    private ArrayList<Message> chat_history = new ArrayList<>();
+    private ArrayList<User> joined_users = new ArrayList<>();
 
     public Chatroom(){
     }

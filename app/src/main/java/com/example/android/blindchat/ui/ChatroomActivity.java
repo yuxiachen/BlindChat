@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -41,25 +42,22 @@ public class ChatroomActivity extends AppCompatActivity {
 
     private Chatroom mChatroom;
     private FirebaseAuth mAuth;
-    private DatabaseReference usersRef, chatRoomRef, chatRoomMessagesRef;
-    private String currentChatName, currentUserID, currentUserName, currentDate, currentTime;
+    private DatabaseReference usersRef, chatRoomRef, chatRoomMessagesRef, chatRoomNameRef;
+    private String currentChatName, currentUserID, currentUserName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_chatroom);
 
-        mChatroom = (Chatroom) getIntent().getExtras().getSerializable("chatroom");
-        mChatroom.setChat_history(new ArrayList<Message>());
-
         String key = (String)getIntent().getExtras().getSerializable("key");
-        currentChatName = mChatroom.getName();
         Toast.makeText(ChatroomActivity.this, currentChatName, Toast.LENGTH_SHORT).show();
 
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
         usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
         chatRoomRef = FirebaseDatabase.getInstance().getReference().child("Chatrooms/" + key);
+        chatRoomNameRef = FirebaseDatabase.getInstance().getReference().child("Chatrooms/" + key + "/name");
         chatRoomMessagesRef = chatRoomRef.child("chat_history");
         InitializeFields();
 
@@ -114,7 +112,6 @@ public class ChatroomActivity extends AppCompatActivity {
 
     private void InitializeFields() {
         mActionBar = getSupportActionBar();
-        mActionBar.setTitle(currentChatName);
         mActionBar.setHomeButtonEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -122,6 +119,38 @@ public class ChatroomActivity extends AppCompatActivity {
         mMessageEditText =  findViewById(R.id.input_group_message);
         mMessageTextView =  findViewById(R.id.group_chat_text_display);
         mScrollView =  findViewById(R.id.my_scroll_view);
+        chatRoomNameRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                if (dataSnapshot.exists())
+                {
+                    currentChatName = dataSnapshot.getValue(String.class);
+                    Log.d("NYWANG, chat name: ", currentChatName);
+                    mActionBar.setTitle(currentChatName);;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        chatRoomRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                if (dataSnapshot.exists())
+                {
+                    mChatroom = dataSnapshot.getValue(Chatroom.class);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void GetUserInfo(){
@@ -149,16 +178,18 @@ public class ChatroomActivity extends AppCompatActivity {
         }
         Calendar calForDate = Calendar.getInstance();
         SimpleDateFormat currentDateFormat = new SimpleDateFormat("MMM dd, yyyy");
-        currentDate = currentDateFormat.format(calForDate.getTime());
+        String currentDate = currentDateFormat.format(calForDate.getTime());
 
         Calendar calForTime = Calendar.getInstance();
         SimpleDateFormat currentTimeFormat = new SimpleDateFormat("hh:mm a");
-        currentTime = currentTimeFormat.format(calForTime.getTime());
+        String currentTime = currentTimeFormat.format(calForTime.getTime());
 
 
         Message message = new Message( message_text, currentTime, currentDate, currentUserName);
-        mChatroom.getChat_history().add(message);
-        chatRoomRef.setValue(mChatroom);
+        if (mChatroom != null) {
+            mChatroom.getChat_history().add(message);
+            chatRoomRef.setValue(mChatroom);
+        }
     }
 
     private void DisplayMessage(DataSnapshot dataSnapshot){
