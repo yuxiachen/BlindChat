@@ -21,11 +21,7 @@ import android.widget.Toast;
 
 import com.example.android.blindchat.R;
 
-public class SettingFragment extends Fragment implements LocationListener {
-
-    //for longtitude and latitude
-    private LocationManager locationManager;
-    private Location location;
+public class SettingFragment extends Fragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
@@ -125,45 +121,8 @@ public class SettingFragment extends Fragment implements LocationListener {
             }
         });
 
-        testLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                testL();
-            }
-        });
 
         return view;
     }
 
-    public void testL() {
-        //for longtitude and latitude
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 123);
-        }
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, this);
-        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        Toast.makeText(getActivity(), "Longitude: " + location.getLongitude() + "\nLatitude: " + location.getLatitude(), Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
 }

@@ -30,7 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class CreateChatroomFragment extends Fragment {
+public class CreateChatroomFragment extends Fragment implements LocationListener {
     private EditText et_topic;
     private EditText et_description;
     private Button btn_create_chatroom;
@@ -77,13 +77,23 @@ public class CreateChatroomFragment extends Fragment {
         String currTime = simpleDateFormat.format(new Date());
         final Chatroom newChatroom = new Chatroom(topic, description, currTime);
 
+        //for location feature
+        if (locate() != null) {
+            newChatroom.setLongitude((float) locate().getLongitude());
+            newChatroom.setLatitude((float) locate().getLatitude());
+        }
+        else {
+            newChatroom.setLatitude((float) 37.35);
+            newChatroom.setLongitude((float) -121.94);
+        }
         final DatabaseReference newRoomRef = FirebaseDatabase.getInstance().getReference("Chatrooms").push();
         newRoomRef.setValue(newChatroom)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(getActivity(), "Chatroom created!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Chatroom created!\nLatitude: " + newChatroom.getLatitude()
+                                    + "\nLongitude: " + newChatroom.getLongitude(), Toast.LENGTH_LONG).show();
                             openChatroom(newRoomRef.getKey());
                         } else {
                             Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
@@ -99,4 +109,38 @@ public class CreateChatroomFragment extends Fragment {
 
     }
 
+    private Location locate() {
+        Location location;
+        LocationManager locationManager;
+        //for longtitude and latitude
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 123);
+        }
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, this);
+        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+        return location;
+    }
+    //to implement location listner
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
 }
