@@ -5,22 +5,22 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.blindchat.R;
+import com.example.android.blindchat.adapter.MessageAdapter;
 import com.example.android.blindchat.model.Chatroom;
 import com.example.android.blindchat.model.Message;
 import com.example.android.blindchat.model.User;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,14 +30,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
 
 public class ChatroomActivity extends AppCompatActivity {
 
     private ActionBar mActionBar;
     private EditText mMessageEditText;
-    private ScrollView mScrollView;
-    private TextView mMessageTextView;
     private ImageButton mSendButton;
 
     private Chatroom mChatroom;
@@ -46,13 +43,18 @@ public class ChatroomActivity extends AppCompatActivity {
     private String currentChatName, currentUserID;
     private User currentUser;
 
+    private ArrayList<Message> chat_history;
+    private RecyclerView recyclerView;
+    private MessageAdapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_chatroom);
+        setContentView(R.layout.activity_chatroom);
 
         String key = (String)getIntent().getExtras().getSerializable("key");
         Toast.makeText(ChatroomActivity.this, currentChatName, Toast.LENGTH_SHORT).show();
+
 
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
@@ -60,9 +62,37 @@ public class ChatroomActivity extends AppCompatActivity {
         chatRoomRef = FirebaseDatabase.getInstance().getReference().child("Chatrooms/" + key);
         chatRoomNameRef = FirebaseDatabase.getInstance().getReference().child("Chatrooms/" + key + "/name");
         chatRoomMessagesRef = chatRoomRef.child("chat_history");
+        GetUserInfo();
+
+        chatRoomNameRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                if (dataSnapshot.exists())
+                {
+                    currentChatName = dataSnapshot.getValue(String.class);
+                    mActionBar.setTitle(currentChatName);;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+        recyclerView = findViewById(R.id.rv_chat_history_chatroom_activity);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        chat_history = new ArrayList<>();
+        mAdapter = new MessageAdapter(chat_history, currentChatName);
+        recyclerView.setAdapter(mAdapter);
+
         InitializeFields();
 
-        GetUserInfo();
+
 
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,37 +100,27 @@ public class ChatroomActivity extends AppCompatActivity {
                 SaveMessageInfoToDatabase(mMessageEditText.getText().toString());
 
                 mMessageEditText.setText("");
-
-                mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
             }
         });
+
+
     }
 
     @Override
     protected void onStart(){
         super.onStart();
-        chatRoomMessagesRef.addChildEventListener(new ChildEventListener() {
+        chatRoomMessagesRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if(dataSnapshot.exists()){
-                    DisplayMessage(dataSnapshot);
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    chat_history.clear();
+
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Message currMessage = snapshot.getValue(Message.class);
+                        chat_history.add(currMessage);
+                    }
+                    mAdapter.notifyDataSetChanged();
                 }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if(dataSnapshot.exists()){
-                    DisplayMessage(dataSnapshot);
-                }
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
             }
 
@@ -118,24 +138,7 @@ public class ChatroomActivity extends AppCompatActivity {
 
         mSendButton =  findViewById(R.id.send_message_button);
         mMessageEditText =  findViewById(R.id.input_group_message);
-        mMessageTextView =  findViewById(R.id.group_chat_text_display);
-        mScrollView =  findViewById(R.id.my_scroll_view);
-        chatRoomNameRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
-                if (dataSnapshot.exists())
-                {
-                    currentChatName = dataSnapshot.getValue(String.class);
-                    mActionBar.setTitle(currentChatName);;
-                }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
         chatRoomRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
@@ -208,22 +211,6 @@ public class ChatroomActivity extends AppCompatActivity {
         if (mChatroom != null) {
             mChatroom.getChat_history().add(message);
             chatRoomRef.setValue(mChatroom);
-        }
-    }
-
-    private void DisplayMessage(DataSnapshot dataSnapshot){
-        Iterator iterator = dataSnapshot.getChildren().iterator();
-
-        while(iterator.hasNext())
-        {
-            String chatDate = (String) ((DataSnapshot)iterator.next()).getValue();
-            String chatMessage = (String) ((DataSnapshot)iterator.next()).getValue();
-            String chatName = (String) ((DataSnapshot)iterator.next()).getValue();
-            String chatTime = (String) ((DataSnapshot)iterator.next()).getValue();
-
-            mMessageTextView.append(chatName + " :\n" + chatMessage + "\n" + chatTime + "     " + chatDate + "\n\n\n");
-
-            mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
         }
     }
 

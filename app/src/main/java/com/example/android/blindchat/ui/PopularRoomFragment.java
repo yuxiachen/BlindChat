@@ -64,6 +64,7 @@ public class PopularRoomFragment extends Fragment implements ChatroomAdapter.OnR
                     popularChatrooms.add(chatroom);
                     popularChatroomKeys.add(key);
                 }
+
                 popularRoomListAdapter.notifyDataSetChanged();
             }
         }
