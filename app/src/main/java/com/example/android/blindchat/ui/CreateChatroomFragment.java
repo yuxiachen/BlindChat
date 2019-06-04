@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +16,9 @@ import com.example.android.blindchat.R;
 import com.example.android.blindchat.model.Chatroom;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -52,7 +51,7 @@ public class CreateChatroomFragment extends Fragment {
         });
     }
 
-    public boolean checkInputValid(){
+    private boolean checkInputValid(){
         topic = et_topic.getText().toString().trim();
         description = et_description.getText().toString().trim();
         boolean isValid = true;
@@ -65,18 +64,18 @@ public class CreateChatroomFragment extends Fragment {
     }
 
     public void createNewChatroom() {
-
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
         String currTime = simpleDateFormat.format(new Date());
         final Chatroom newChatroom = new Chatroom(topic, description, currTime);
 
-        FirebaseDatabase.getInstance().getReference("Chatrooms").push().setValue(newChatroom)
+        final DatabaseReference newRoomRef = FirebaseDatabase.getInstance().getReference("Chatrooms").push();
+        newRoomRef.setValue(newChatroom)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(getActivity(), "Chatroom created!", Toast.LENGTH_LONG).show();
-                            openChatroom(newChatroom);
+                            openChatroom(newChatroom, newRoomRef.getKey());
                         } else {
                             Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         }
@@ -84,9 +83,10 @@ public class CreateChatroomFragment extends Fragment {
                 });
     }
 
-    public void openChatroom(Chatroom chatroom) {
+    private void openChatroom(Chatroom chatroom, String key) {
         Intent intent = new Intent(getActivity(), ChatroomActivity.class);
         intent.putExtra("chatroom", chatroom);
+        intent.putExtra("key", key);
         startActivity(intent);
     }
 

@@ -6,19 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".ui.ChatroomActivity">
 
-
-    <include
-        android:id="@+id/group_chat_bar_layout"
-        layout="@layout/app_bar_layout"
-        >
-    </include>
-
-
     <ScrollView
         android:id="@+id/my_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/group_chat_bar_layout"
         android:layout_above="@+id/myLinearLayout">
 
         <LinearLayout
@@ -42,8 +33,6 @@
         </LinearLayout>
 
     </ScrollView>
-
-
 
     <LinearLayout
         android:id="@+id/myLinearLayout"

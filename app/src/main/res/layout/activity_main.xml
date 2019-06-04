@@ -9,22 +9,27 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="63dp"
-        android:id="@+id/main_frame"/>
+        android:id="@+id/main_frame"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/nav_view"/>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="?android:attr/windowBackground"
-        android:backgroundTint="@color/colorAccentLight"
+        android:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:menu="@menu/bottom_nav_menu"
         android:contextClickable="true"
-        android:defaultFocusHighlightEnabled="true"/>
+        android:defaultFocusHighlightEnabled="true"
+        app:itemIconTint="@drawable/color_bottom_navigator"
+        app:itemTextColor="@drawable/color_bottom_navigator"
+        />
 
 </android.support.constraint.ConstraintLayout>

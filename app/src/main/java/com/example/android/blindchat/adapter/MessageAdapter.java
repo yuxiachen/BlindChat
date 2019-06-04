@@ -68,10 +68,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         String messageSenderId = mAuth.getCurrentUser().getUid();
         Message message = userMessagesList.get(i);
 
-        String fromUserID = message.getFrom();
-        String fromMessageType = message.getType();
-
-
         /* Picasso image downloading and caching library, TBD for implementation.
         usersRef = FirebaseDatabase.getInstance().getReference().child("Users").child(fromUserID);
 
@@ -99,7 +95,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         messageViewHolder.messageSenderPicture.setVisibility(View.GONE);
         messageViewHolder.messageReceiverPicture.setVisibility(View.GONE);
 
-        if (fromMessageType.equals("text"))
+        /*if (fromMessageType.equals("text"))
         {
             if (fromUserID.equals(messageSenderId))
             {
@@ -118,7 +114,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                 messageViewHolder.receiverMessageText.setTextColor(Color.BLACK);
                 messageViewHolder.receiverMessageText.setText(message.getMessage() + "\n \n" + message.getTime() + " - " + message.getDate());
             }
-        }
+        }*/
     }
 
     @Override

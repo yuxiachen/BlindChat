@@ -1,6 +1,6 @@
 package com.example.android.blindchat.ui;
 
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -9,27 +9,25 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.example.android.blindchat.R;
-import com.example.android.blindchat.model.User;
-
-
 
 
 public class MainActivity extends AppCompatActivity {
-    private TextView mTextMessage;
-
+    private Fragment selectedFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        mTextMessage = findViewById(R.id.message);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        // add need to add a fragment when create the activity
+        if (selectedFragment == null) {
+            selectedFragment = new TrendingFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.add(R.id.main_frame, selectedFragment);
+            transaction.commit();
+        }
     }
 
 
@@ -38,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment selectedFragment = null;
             switch (item.getItemId()) {
                 case R.id.navigation_trending:
                     selectedFragment = new TrendingFragment();
@@ -67,13 +64,21 @@ public class MainActivity extends AppCompatActivity {
             transaction.commit();
         }
     };
+    public void toSearchFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        SearchFragment searchFragment = new SearchFragment();
+        transaction.replace(R.id.main_frame, searchFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    private void toRoomInfo(){
+        Intent intent = new Intent(this, ChatroomInfoActivity.class);
+        startActivity(intent);
+    }
 
 }
-
-
-
-
-
 
 /***
  * Method to get the user info, can be used later*
