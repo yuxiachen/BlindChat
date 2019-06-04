@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+
 import com.example.android.blindchat.R;
 import com.example.android.blindchat.adapter.ChatroomAdapter;
 import com.example.android.blindchat.model.Chatroom;
@@ -21,49 +23,48 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class JoinedRoomFragment extends Fragment implements ChatroomAdapter.OnRoomItemClickedListener{
-
-    private static final String TAG = "debugging joinedroom";
-
-    private RecyclerView recyclerView;
-    private ChatroomAdapter joinedRoomAdapter;
-
-    private ArrayList<Chatroom> joinedRooms;
-    private ArrayList<String> joinedRoomKeys;
+public class PopularRoomFragment extends Fragment implements ChatroomAdapter.OnRoomItemClickedListener{
+    private RecyclerView mostPopularList;
+    private ChatroomAdapter popularRoomListAdapter;
+    private ArrayList<Chatroom> popularChatrooms;
+    private ArrayList<String> popularChatroomKeys;
 
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recycler_view, null);
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        recyclerView = view.findViewById(R.id.rv_room_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-        joinedRooms = new ArrayList<>();
-        joinedRoomKeys = new ArrayList<>();
-        joinedRoomAdapter = new ChatroomAdapter(joinedRooms, joinedRoomKeys, this);
-        recyclerView.setAdapter(joinedRoomAdapter);
-        Query query = FirebaseDatabase.getInstance().getReference("Chatrooms");
-        query.addListenerForSingleValueEvent(joinedRoomValueEventListener);
+        mostPopularList = view.findViewById(R.id.rv_room_list);
+        mostPopularList.setHasFixedSize(true);
+        mostPopularList.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
+        popularChatrooms = new ArrayList<>();
+        popularChatroomKeys = new ArrayList<>();
+        popularRoomListAdapter = new ChatroomAdapter(popularChatrooms, popularChatroomKeys, this);
+        mostPopularList.setAdapter(popularRoomListAdapter);
+
+        Query popularQuery = FirebaseDatabase.getInstance().getReference("Chatrooms").orderByChild("member_number");
+        popularQuery.addListenerForSingleValueEvent(popularChatroomEventListener);
+
     }
 
-    private ValueEventListener joinedRoomValueEventListener = new ValueEventListener() {
+    private ValueEventListener popularChatroomEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            joinedRooms.clear();
-            joinedRoomKeys.clear();
+            popularChatrooms.clear();
+            popularChatroomKeys.clear();
             if (dataSnapshot.exists()) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Chatroom chatroom = snapshot.getValue(Chatroom.class);
                     String key = snapshot.getKey();
-                    joinedRooms.add(chatroom);
-                    joinedRoomKeys.add(key);
+                    popularChatrooms.add(chatroom);
+                    popularChatroomKeys.add(key);
                 }
-                joinedRoomAdapter.notifyDataSetChanged();
+                popularRoomListAdapter.notifyDataSetChanged();
             }
         }
 
@@ -72,8 +73,6 @@ public class JoinedRoomFragment extends Fragment implements ChatroomAdapter.OnRo
 
         }
     };
-
-
     private void openChatroomActivity(Chatroom chatroom, String key) {
         Intent intent = new Intent(getActivity(), ChatroomActivity.class);
         intent.putExtra("chatroom", chatroom);
