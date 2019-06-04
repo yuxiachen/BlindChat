@@ -37,7 +37,7 @@ public class ChatroomFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstancestate){
-        chatroomFragmentView = inflater.inflate(R.layout.fragment_joined, container, false);
+        chatroomFragmentView = inflater.inflate(R.layout.fragment_recycler_view, container, false);
         GroupRef = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
         InitializeFields();
         RetrieveAndDisplayRooms();
@@ -56,7 +56,7 @@ public class ChatroomFragment extends Fragment {
     }
 
     private void InitializeFields(){
-        list_view = chatroomFragmentView.findViewById(R.id.rv_joined_room);
+        list_view = chatroomFragmentView.findViewById(R.id.rv_room_list);
         list_view.setAdapter(arrayAdapter);
     }
 
