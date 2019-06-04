@@ -1,17 +1,16 @@
 package com.example.android.blindchat.ui;
 
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.android.blindchat.R;
@@ -24,9 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import static android.support.constraint.Constraints.TAG;
 
-public class ChangePasswordFragment extends Fragment {
-
-    private ImageButton goback;
+public class ChangePasswordActivity extends AppCompatActivity {
     private EditText currentpw;
     private EditText newpw;
     private EditText newpwagain;
@@ -36,16 +33,23 @@ public class ChangePasswordFragment extends Fragment {
     private String snewpwagain;
     private boolean isValidInput;
     private FirebaseAuth mAuth;
+    private ActionBar mActionBar;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_change_password, null);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_change_password);
 
-        currentpw = (TextInputEditText) view.findViewById(R.id.change_un_input);
-        newpw = (TextInputEditText) view.findViewById(R.id.change_newpw_input);
-        newpwagain = (TextInputEditText) view.findViewById(R.id.change_newpw_input1);
+        mActionBar = getSupportActionBar();
+        mActionBar.setTitle("Change Password");
+        mActionBar.setHomeButtonEnabled(true);
+        mActionBar.setDisplayHomeAsUpEnabled(true);
 
-        savepw =(Button)view.findViewById(R.id.bt_pw_save) ;
+        currentpw = (TextInputEditText) findViewById(R.id.change_un_input);
+        newpw = (TextInputEditText) findViewById(R.id.change_newpw_input);
+        newpwagain = (TextInputEditText) findViewById(R.id.change_newpw_input1);
+
+        savepw =(Button)findViewById(R.id.bt_pw_save) ;
 
         savepw.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,7 +57,6 @@ public class ChangePasswordFragment extends Fragment {
                 checkInputIsValid();
             }
         });
-        return view;
     }
 
     private void checkInputIsValid() {
@@ -64,12 +67,12 @@ public class ChangePasswordFragment extends Fragment {
         if (scurrentpw.isEmpty() ){
             currentpw.requestFocus();
             isValidInput = false;
-            Toast.makeText(getActivity(), getString(R.string.input_password_error), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.input_password_error), Toast.LENGTH_LONG).show();
         }
         if (!snewpw.equals(snewpwagain)) {
             newpwagain.requestFocus();
             isValidInput = false;
-            Toast.makeText(getActivity(), getString(R.string.input_password_not_consistent), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.input_password_not_consistent), Toast.LENGTH_LONG).show();
         }
         if (isValidInput) {
             updatePassword();
@@ -89,13 +92,13 @@ public class ChangePasswordFragment extends Fragment {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                Toast.makeText(getActivity(),
+                                Toast.makeText(getApplicationContext(),
                                         "Password has been updated",
                                         Toast.LENGTH_SHORT).show();
                             } else {
                                 Log.e(TAG, "Error in updating password",
                                         task.getException());
-                                Toast.makeText(getActivity(),
+                                Toast.makeText(getApplicationContext(),
                                         "Failed to update password.",
                                         Toast.LENGTH_SHORT).show();
                             }
@@ -103,23 +106,20 @@ public class ChangePasswordFragment extends Fragment {
                     });
                 }
                 else {
-                    Toast.makeText(getActivity(),"Authentication failed",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Authentication failed",Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ImageButton goback = (ImageButton)view.findViewById(R.id.btn_pw_reset_back);
-        goback.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });}
-
-
-
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
+}

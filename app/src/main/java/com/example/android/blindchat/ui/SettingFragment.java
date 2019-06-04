@@ -1,6 +1,7 @@
 package com.example.android.blindchat.ui;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.android.blindchat.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class SettingFragment extends Fragment {
 
@@ -28,23 +30,15 @@ public class SettingFragment extends Fragment {
         changename.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                toChangeUsername();
 
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                ChangeUsernameFragment fragment = new ChangeUsernameFragment();
-                transaction.replace(R.id.main_frame,fragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
             }
         });
 
         changepw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                ChangePasswordFragment fragment = new ChangePasswordFragment();
-                transaction.replace(R.id.main_frame,fragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                toChangePassword();
             }
         });
 
@@ -60,8 +54,7 @@ public class SettingFragment extends Fragment {
                 dialog.setPositiveButton("LOG OUT", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(getActivity(),InitActivity.class);
-                        startActivity(intent);
+                        signout();
                     }
                 });
                 dialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -71,7 +64,6 @@ public class SettingFragment extends Fragment {
                 });
                 dialog.create();
                 dialog.show();
-
             }
         });
 
@@ -106,7 +98,21 @@ public class SettingFragment extends Fragment {
         return view;
     }
 
+    private void signout() {
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(getActivity(),InitActivity.class);
+        startActivity(intent);
+    }
 
+    private void toChangeUsername() {
+        Intent intent = new Intent(getActivity(),ChangeUsernameActivity.class);
+        startActivity(intent);
+    }
+
+    private void toChangePassword() {
+        Intent intent = new Intent(getActivity(),ChangePasswordActivity.class);
+        startActivity(intent);
+    }
 
 
 
