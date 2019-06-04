@@ -43,7 +43,8 @@ public class ChatroomActivity extends AppCompatActivity {
     private Chatroom mChatroom;
     private FirebaseAuth mAuth;
     private DatabaseReference usersRef, chatRoomRef, chatRoomMessagesRef, chatRoomNameRef;
-    private String currentChatName, currentUserID, currentUserName;
+    private String currentChatName, currentUserID;
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +127,6 @@ public class ChatroomActivity extends AppCompatActivity {
                 if (dataSnapshot.exists())
                 {
                     currentChatName = dataSnapshot.getValue(String.class);
-                    Log.d("NYWANG, chat name: ", currentChatName);
                     mActionBar.setTitle(currentChatName);;
                 }
             }
@@ -143,6 +143,7 @@ public class ChatroomActivity extends AppCompatActivity {
                 if (dataSnapshot.exists())
                 {
                     mChatroom = dataSnapshot.getValue(Chatroom.class);
+                    TryToAddUserToRoom();
                 }
             }
 
@@ -153,6 +154,23 @@ public class ChatroomActivity extends AppCompatActivity {
         });
     }
 
+    private void TryToAddUserToRoom() {
+        if (mChatroom !=null && currentUser != null) {
+            boolean joined = false;
+            for (User user : mChatroom.getJoined_users()) {
+                if (user.getEmail().equals(currentUser.getEmail())) {
+                    joined = true;
+                }
+            }
+            if (!joined) {
+                ArrayList<User> users = mChatroom.getJoined_users();
+                users.add(currentUser);
+                mChatroom.setJoined_users(users);
+                chatRoomRef.setValue(mChatroom);
+            }
+        }
+    }
+
     private void GetUserInfo(){
         usersRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
@@ -160,7 +178,8 @@ public class ChatroomActivity extends AppCompatActivity {
             {
                 if (dataSnapshot.exists())
                 {
-                    currentUserName = dataSnapshot.getValue(User.class).getUsername();
+                    currentUser = dataSnapshot.getValue(User.class);
+                    TryToAddUserToRoom();
                 }
             }
 
@@ -185,7 +204,7 @@ public class ChatroomActivity extends AppCompatActivity {
         String currentTime = currentTimeFormat.format(calForTime.getTime());
 
 
-        Message message = new Message( message_text, currentTime, currentDate, currentUserName);
+        Message message = new Message( message_text, currentTime, currentDate, currentUser.getUsername());
         if (mChatroom != null) {
             mChatroom.getChat_history().add(message);
             chatRoomRef.setValue(mChatroom);
