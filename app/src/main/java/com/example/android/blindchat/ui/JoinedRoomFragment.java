@@ -43,14 +43,14 @@ public class JoinedRoomFragment extends Fragment implements ChatroomAdapter.OnRo
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_joined, null);
+        View view = inflater.inflate(R.layout.fragment_recycler_view, null);
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerView = view.findViewById(R.id.rv_joined_room);
+        recyclerView = view.findViewById(R.id.rv_room_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         joinedRooms = new ArrayList<>();
         joinedRoomKeys = new ArrayList<>();
