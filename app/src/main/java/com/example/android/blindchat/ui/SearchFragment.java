@@ -13,13 +13,17 @@ import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.example.android.blindchat.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SearchFragment extends Fragment {
 
-    SearchView searchInSearch;
-    ListView searchList;
-    String[] searchListItems;
-    LinearLayout frame;
+    private SearchView searchInSearch;
+    private ListView searchList;
+    private String[] searchListItems;
+    private LinearLayout frame;
+    private DatabaseReference mRoomDatabase;
+
 
     //fragmentStatePager for page change listener is needed
     //https://medium.com/@droidbyme/android-material-design-tabs-tab-layout-with-swipe-884085ae80ff
@@ -40,6 +44,9 @@ public class SearchFragment extends Fragment {
         searchInSearch.setIconifiedByDefault(false);
         searchInSearch.setQueryHint("Search");
         searchInSearch.setSubmitButtonEnabled(true);
+
+        mRoomDatabase = FirebaseDatabase.getInstance().getReference("Chatrooms");
+
         searchInSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -63,11 +70,12 @@ public class SearchFragment extends Fragment {
 
     private void toSearchFragment() {
 
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+
+        /*FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         SearchFragment searchFragment = new SearchFragment();
         transaction.replace(R.id.main_frame, searchFragment);
         transaction.addToBackStack(null);
-        transaction.commit();
+        transaction.commit();*/
     }
 }
