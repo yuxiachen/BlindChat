@@ -109,16 +109,17 @@
         android:paddingLeft="30dp"
         android:text="xxxxxxxx"
         android:textAllCaps="false" />
+
     <Button
+        android:id="@+id/btn_test_location"
+        style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="xxxxxxxx"
-        android:paddingLeft="30dp"
-        android:textAllCaps="false"
         android:drawableEnd="@drawable/ic_chevron_right_black_24dp"
         android:gravity="fill"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        />
+        android:paddingLeft="30dp"
+        android:text="xxxxxxxx"
+        android:textAllCaps="false" />
 
 
 

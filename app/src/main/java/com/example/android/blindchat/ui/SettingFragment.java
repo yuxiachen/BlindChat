@@ -1,6 +1,13 @@
 package com.example.android.blindchat.ui;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -10,10 +17,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.android.blindchat.R;
 
-public class SettingFragment extends Fragment {
+public class SettingFragment extends Fragment implements LocationListener {
+
+    //for longtitude and latitude
+    private LocationManager locationManager;
+    private Location location;
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
@@ -25,6 +37,7 @@ public class SettingFragment extends Fragment {
         Button appVersion = (Button)view.findViewById(R.id.app_version);
         Button update = (Button)view.findViewById(R.id.software_update);
         Button notification = (Button)view.findViewById(R.id.btn_notification1);
+        Button testLocation = (Button)view.findViewById(R.id.btn_test_location);
 
         changename.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,11 +125,45 @@ public class SettingFragment extends Fragment {
             }
         });
 
+        testLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                testL();
+            }
+        });
+
         return view;
     }
 
+    public void testL() {
+        //for longtitude and latitude
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 123);
+        }
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, this);
+        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        Toast.makeText(getActivity(), "Longitude: " + location.getLongitude() + "\nLatitude: " + location.getLatitude(), Toast.LENGTH_LONG).show();
+    }
 
+    @Override
+    public void onLocationChanged(Location location) {
 
+    }
 
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
 }
