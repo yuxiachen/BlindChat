@@ -123,9 +123,7 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
             notificationManager.createNotificationChannel(notificationChannel);
         }
 
-        Chatroom chatroom = message.getRoom();
         Intent intent = new Intent(this, ChatroomActivity.class);
-        intent.putExtra("chatroom", chatroom);
         intent.putExtra("key", key);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, notificationID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
