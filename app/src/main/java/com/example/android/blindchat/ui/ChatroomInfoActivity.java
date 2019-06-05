@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.example.android.blindchat.R;
 import com.example.android.blindchat.model.Chatroom;
 import com.example.android.blindchat.model.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -41,6 +43,8 @@ public class ChatroomInfoActivity extends AppCompatActivity {
     private DatabaseReference joinedRoomRef;
     private DatabaseReference roomRef;
 
+    private ArrayList<String> joinedUserKeys;
+
     private Query userInJoinedListQuery;
 
 
@@ -58,6 +62,8 @@ public class ChatroomInfoActivity extends AppCompatActivity {
         exitButton = findViewById(R.id.info_leave);
 
         currUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        joinedUserKeys = new ArrayList<>();
 
         actionBar= getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
@@ -83,14 +89,24 @@ public class ChatroomInfoActivity extends AppCompatActivity {
             }
         });
 
-        userInJoinedListQuery = FirebaseDatabase.getInstance().getReference("JoinedUsers")
-                .child(roomKey).equalTo(currUid);
+        userInJoinedListQuery = FirebaseDatabase.getInstance().getReference("JoinedUsers").child(roomKey);
+
         userInJoinedListQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    joinButton.setEnabled(false);
-                    exitButton.setEnabled(true);
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        String joinedUserKey = snapshot.getValue(String.class);
+                        if (joinedUserKey.equals(currUid)) {
+                            joinButton.setEnabled(false);
+                            exitButton.setEnabled(true);
+                            return;
+                        }
+                        else {
+                            joinButton.setEnabled(true);
+                            exitButton.setEnabled(false);
+                        }
+                    }
                 } else {
                     joinButton.setEnabled(true);
                     exitButton.setEnabled(false);
@@ -115,18 +131,14 @@ public class ChatroomInfoActivity extends AppCompatActivity {
 
     public void join(View view){
         addUserToJoinedList();
-        member_live = chatroom.getMember_number();
         addRoomToJoinedList(chatroom);
-        roomRef.child("member_number").setValue(member_live);
-        Toast.makeText(getApplicationContext(), "Join the room successfully", Toast.LENGTH_LONG).show();
+
     }
 
     public void exit(View view){
         removeUserToJoinedList();
-        removeRoomToJoinedList();
         member_live = chatroom.getMember_number();
-        roomRef.child("member_number").setValue(member_live);
-        Toast.makeText(getApplicationContext(), "Leave the room successfully", Toast.LENGTH_LONG).show();
+        removeRoomToJoinedList();
     }
 
 
@@ -137,7 +149,29 @@ public class ChatroomInfoActivity extends AppCompatActivity {
 
     private void addRoomToJoinedList(Chatroom chatroom) {
         joinedRoomRef = FirebaseDatabase.getInstance().getReference("JoinedRooms").child(currUid);
-        joinedRoomRef.child(roomKey).setValue(chatroom);
+        joinedRoomRef.child(roomKey).setValue(chatroom).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    roomRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            int member = Integer.parseInt(dataSnapshot.child("member_number").getValue().toString());
+                            member = member + 1;
+                            roomRef.child("member_number").setValue(member);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                    Toast.makeText(getApplicationContext(), "Join the room successfully", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
 
@@ -148,7 +182,29 @@ public class ChatroomInfoActivity extends AppCompatActivity {
 
     private void removeRoomToJoinedList() {
         joinedRoomRef = FirebaseDatabase.getInstance().getReference("JoinedRooms").child(currUid);
-        joinedRoomRef.child(roomKey).removeValue();
+        joinedRoomRef.child(roomKey).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    roomRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            int member = Integer.parseInt(dataSnapshot.child("member_number").getValue().toString());
+                            member = member - 1;
+                            roomRef.child("member_number").setValue(member);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                    Toast.makeText(getApplicationContext(), "Leave the room successfully", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     @Override
