@@ -1,28 +1,34 @@
 package com.example.android.blindchat.model;
 
 import java.io.Serializable;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 
 public class Chatroom implements Serializable {
+    private String id;
     private String name;
     private String description;
     private User creator;
     private float longitude;
     private float latitude;
     private String created_at;
-    private int member_number = 1;
-    private ArrayList<Message> chat_history = new ArrayList<>();
-    private ArrayList<User> joined_users = new ArrayList<>();
+    private int member_number;
 
     public Chatroom(){
     }
 
-    public Chatroom(String name, String description, String created_at){
+    public Chatroom(String id, String name, String description, String created_at){
+        this.id = id;
         this.name = name;
         this.description = description;
         this.created_at = created_at;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -74,28 +80,12 @@ public class Chatroom implements Serializable {
         this.longitude = longitude;
     }
 
-    public ArrayList<User> getJoined_users() {
-        return joined_users;
-    }
-
     public String getCreated_at() {
         return created_at;
     }
 
     public void setCreated_at(String created_at) {
         this.created_at = created_at;
-    }
-
-    public void setJoined_users(ArrayList<User> joined_users) {
-        this.joined_users = joined_users;
-    }
-
-    public ArrayList<Message> getChat_history() {
-        return chat_history;
-    }
-
-    public void setChat_history(ArrayList<Message> chat_history) {
-        this.chat_history = chat_history;
     }
 
 }

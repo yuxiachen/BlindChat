@@ -16,6 +16,7 @@ import com.example.android.blindchat.R;
 import com.example.android.blindchat.model.Chatroom;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -28,6 +29,11 @@ public class CreateChatroomFragment extends Fragment {
     private Button btn_create_chatroom;
     private String topic;
     private String description;
+    private String currUid;
+    private DatabaseReference newRoomRef;
+    private DatabaseReference joinedUserRef;
+    private DatabaseReference joinedRoomRef;
+    private String roomKey;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,6 +47,7 @@ public class CreateChatroomFragment extends Fragment {
         et_topic = view.findViewById(R.id.topic_fragment_create);
         et_description = view.findViewById(R.id.description_fragment_create);
         btn_create_chatroom = view.findViewById(R.id.btn_create_chatroom_fragment_create);
+        currUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         btn_create_chatroom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,21 +73,35 @@ public class CreateChatroomFragment extends Fragment {
     public void createNewChatroom() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss");
         String currTime = simpleDateFormat.format(new Date());
-        final Chatroom newChatroom = new Chatroom(topic, description, currTime);
 
-        final DatabaseReference newRoomRef = FirebaseDatabase.getInstance().getReference("Chatrooms").push();
+        newRoomRef = FirebaseDatabase.getInstance().getReference("Chatrooms").push();
+        roomKey = newRoomRef.getKey();
+        final Chatroom newChatroom = new Chatroom(roomKey, topic, description, currTime);
+        newChatroom.setMember_number(1);
         newRoomRef.setValue(newChatroom)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(getActivity(), "Chatroom created!", Toast.LENGTH_LONG).show();
-                            openChatroom(newRoomRef.getKey(), topic);
+                            addUserToJoinedList();
+                            addRoomToJoinedList(newChatroom);
+                            openChatroom(roomKey, topic);
                         } else {
                             Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         }
                     }
                 });
+    }
+
+    private void addUserToJoinedList() {
+        joinedUserRef = FirebaseDatabase.getInstance().getReference("JoinedUsers").child(roomKey);
+        joinedUserRef.child(currUid).setValue(currUid);
+    }
+
+    private void addRoomToJoinedList(Chatroom chatroom) {
+        joinedRoomRef = FirebaseDatabase.getInstance().getReference("JoinedRooms").child(currUid);
+        joinedRoomRef.child(roomKey).setValue(chatroom);
     }
 
     private void openChatroom(String key, String topic) {
@@ -89,6 +110,4 @@ public class CreateChatroomFragment extends Fragment {
         intent.putExtra("roomName", topic);
         startActivity(intent);
     }
-
-
 }
