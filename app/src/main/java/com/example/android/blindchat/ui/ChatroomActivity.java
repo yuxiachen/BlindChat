@@ -82,7 +82,6 @@ public class ChatroomActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SaveMessageInfoToDatabase(mMessageEditText.getText().toString());
-
                 mMessageEditText.setText("");
                 recyclerView.scrollToPosition(chat_history.size() - 1);
             }
@@ -98,6 +97,7 @@ public class ChatroomActivity extends AppCompatActivity {
                     Message currMessage = snapshot.getValue(Message.class);
                     chat_history.add(currMessage);
                 }
+                recyclerView.scrollToPosition(chat_history.size() - 1);
                 mAdapter.notifyDataSetChanged();
             }
 
