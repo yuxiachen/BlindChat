@@ -76,6 +76,7 @@ public class ChatroomActivity extends AppCompatActivity {
         chat_history = new ArrayList<>();
         mAdapter = new MessageAdapter(chat_history, userName);
         recyclerView.setAdapter(mAdapter);
+        recyclerView.scrollToPosition(chat_history.size() - 1);
 
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,6 +84,7 @@ public class ChatroomActivity extends AppCompatActivity {
                 SaveMessageInfoToDatabase(mMessageEditText.getText().toString());
 
                 mMessageEditText.setText("");
+                recyclerView.scrollToPosition(chat_history.size() - 1);
             }
         });
     }
