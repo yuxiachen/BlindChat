@@ -102,6 +102,7 @@
         android:layout_marginBottom="168dp"
         android:backgroundTint="@color/colorAccent"
         android:text="Join"
+        android:onClick="join"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -113,6 +114,7 @@
         android:layout_marginBottom="168dp"
         android:backgroundTint="@color/colorAccent"
         android:text="Leave"
+        android:onClick="exit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

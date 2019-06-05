@@ -113,7 +113,8 @@ public class SignupActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            final User user = new User(email, username);
+                            String userId = mAuth.getUid();
+                            final User user = new User(userId, email, username);
                             FirebaseDatabase.getInstance().getReference("Users")
                                     .child(mAuth.getCurrentUser().getUid())
                                     .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
