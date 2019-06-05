@@ -22,7 +22,7 @@
         android:maxWidth="240dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:background="@drawable/rounded_regtangle_green"
+        android:background="@drawable/rounded_rectangle_blue"
         android:text="sent messages here"
         android:padding="10dp"
         android:textSize="18sp"

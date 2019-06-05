@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.example.android.blindchat.R;
 import com.example.android.blindchat.adapter.ChatroomAdapter;
+import com.example.android.blindchat.adapter.JoinedRoomAdapter;
 import com.example.android.blindchat.model.Chatroom;
 import com.example.android.blindchat.model.User;
 
@@ -26,13 +27,13 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class JoinedRoomFragment extends Fragment implements ChatroomAdapter.OnRoomItemClickedListener{
+public class JoinedRoomFragment extends Fragment implements JoinedRoomAdapter.OnRoomItemClickedListener{
 
     private static final String TAG = "debugging joinedroom";
 
     private DatabaseReference dfJoindRoom;
     private RecyclerView recyclerView;
-    private ChatroomAdapter joinedRoomAdapter;
+    private JoinedRoomAdapter joinedRoomAdapter;
     private ArrayList<Chatroom> joinedRooms;
     private ArrayList<String> joinedRoomKeys;
     private String userName;
@@ -50,7 +51,7 @@ public class JoinedRoomFragment extends Fragment implements ChatroomAdapter.OnRo
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         joinedRooms = new ArrayList<>();
         joinedRoomKeys = new ArrayList<>();
-        joinedRoomAdapter = new ChatroomAdapter(joinedRooms, joinedRoomKeys, this);
+        joinedRoomAdapter = new JoinedRoomAdapter(joinedRooms, joinedRoomKeys, this);
         recyclerView.setAdapter(joinedRoomAdapter);
 
         String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();

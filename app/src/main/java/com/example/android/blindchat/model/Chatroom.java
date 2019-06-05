@@ -11,6 +11,7 @@ public class Chatroom implements Serializable {
     private float longitude;
     private float latitude;
     private String created_at;
+    private String school;
     private int member_number;
 
     public Chatroom(){
