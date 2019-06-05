@@ -19,9 +19,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class ChangeUsernameActivity extends AppCompatActivity {
-    private EditText newun ;
-    private Button saveun;
-    private String snewun;
+    private EditText newUsername;
+    private Button saveBtn;
+    private String snewUsername;
     private ActionBar mActionBar;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -33,12 +33,13 @@ public class ChangeUsernameActivity extends AppCompatActivity {
         mActionBar.setHomeButtonEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
 
-        newun = (TextInputEditText) findViewById(R.id.change_un_input);
-        saveun = (Button) findViewById(R.id.bt_un_save);
-        saveun.setOnClickListener(new View.OnClickListener() {
+        newUsername = (TextInputEditText) findViewById(R.id.change_un_input);
+        saveBtn = (Button) findViewById(R.id.bt_un_save);
+
+        saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (newun.length() == 0) {
+                if (newUsername.length() == 0) {
                     Toast.makeText(getApplicationContext(), "Please enter username", Toast.LENGTH_LONG).show();
                 } else {
                     updateProfile();
@@ -50,8 +51,9 @@ public class ChangeUsernameActivity extends AppCompatActivity {
 
         public void updateProfile(){
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            snewUsername = newUsername.getText().toString();
             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                    .setDisplayName(snewun)
+                    .setDisplayName(snewUsername)
                     .build();
 
             user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>(){
