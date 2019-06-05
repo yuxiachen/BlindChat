@@ -1,7 +1,7 @@
 package com.example.android.blindchat.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -15,18 +15,33 @@ import com.example.android.blindchat.R;
 
 public class MainActivity extends AppCompatActivity {
     private Fragment selectedFragment;
+    private Fragment trendingFragment;
+    private Fragment joinedRoomFragment;
+    private Fragment settingFragment;
+    private Fragment createChatroomFragment;
+    private FragmentManager fragmentManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        fragmentManager = getSupportFragmentManager();
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+
         // add need to add a fragment when create the activity
-        if (selectedFragment == null) {
-            selectedFragment = new TrendingFragment();
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.main_frame, selectedFragment);
-            transaction.commit();
+        if (savedInstanceState == null) {
+            if (selectedFragment == null) {
+                trendingFragment = new TrendingFragment();
+                selectedFragment = trendingFragment;
+                fragmentManager.beginTransaction().add(R.id.main_frame, selectedFragment).commit();
+            }
+        } else {
+            selectedFragment = getSupportFragmentManager().getFragment(savedInstanceState, "SelectFragment");
+            trendingFragment = getSupportFragmentManager().getFragment(savedInstanceState, "TrendingFragment");
+            joinedRoomFragment = getSupportFragmentManager().getFragment(savedInstanceState, "JoinedFragment");
+            createChatroomFragment = getSupportFragmentManager().getFragment(savedInstanceState, "CreateChatroomFragment");
+            settingFragment = getSupportFragmentManager().getFragment(savedInstanceState, "SettingFragment");
         }
     }
 
@@ -38,64 +53,62 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_trending:
-                    selectedFragment = new TrendingFragment();
-                    replaceFragment(selectedFragment);
+                    if (trendingFragment == null) {
+                        trendingFragment = new TrendingFragment();
+                    }
+                    selectedFragment = trendingFragment;
                     break;
                 case R.id.navigation_joined:
-                    selectedFragment = new JoinedRoomFragment();
-                    replaceFragment(selectedFragment);
+                    if (joinedRoomFragment == null) {
+                        joinedRoomFragment = new JoinedRoomFragment();
+                    }
+                    selectedFragment = joinedRoomFragment;
                     break;
                 case R.id.navigation_create:
-                    selectedFragment = new CreateChatroomFragment();
-                    replaceFragment(selectedFragment);
+                    if (createChatroomFragment == null) {
+                        createChatroomFragment = new CreateChatroomFragment();
+                    }
+                    selectedFragment = createChatroomFragment;
                     break;
                 case R.id.navigation_settings:
-                    selectedFragment = new SettingFragment();
-                    replaceFragment(selectedFragment);
+                    if (settingFragment == null) {
+                        settingFragment = new SettingFragment();
+                    }
+                    selectedFragment = settingFragment;
                     break;
             }
-
+            replaceFragment(selectedFragment);
             return true;
         }
-        public void replaceFragment(Fragment selectedFragment){
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.main_frame, selectedFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
-        }
     };
-    public void toSearchFragment() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        SearchFragment searchFragment = new SearchFragment();
-        transaction.replace(R.id.main_frame, searchFragment);
+
+    public void replaceFragment(Fragment selectedFragment){
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.main_frame, selectedFragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }
 
-    private void toRoomInfo(){
-        Intent intent = new Intent(this, ChatroomInfoActivity.class);
-        startActivity(intent);
-    }
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        if (selectedFragment != null && selectedFragment.isAdded()) {
+            getSupportFragmentManager().putFragment(outState, "SelectFragment", selectedFragment);
+        }
 
+        if (trendingFragment != null) {
+            getSupportFragmentManager().putFragment(outState, "TrendingFragment", trendingFragment);
+        }
+        if (settingFragment != null) {
+            getSupportFragmentManager().putFragment(outState, "SettingFragment", settingFragment);
+        }
+        if (joinedRoomFragment != null) {
+            getSupportFragmentManager().putFragment(outState, "JoinedFragment", joinedRoomFragment);
+        }
+        if (createChatroomFragment != null) {
+            getSupportFragmentManager().putFragment(outState, "CreateChatroomFragment", createChatroomFragment);
+        }
+    }
 }
-
-/***
- * Method to get the user info, can be used later*
-
-DatabaseReference dbref = FirebaseDatabase.getInstance()
-        .getReference().child("Users");
-
-            dbref.addValueEventListener(new ValueEventListener() {
-    @Override
-    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-        user = dataSnapshot.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .getValue(User.class);
-    }
-    @Override
-    public void onCancelled(@NonNull DatabaseError databaseError) {
-    }
-});
- */
 
 

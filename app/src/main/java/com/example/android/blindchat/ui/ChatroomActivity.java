@@ -1,5 +1,6 @@
 package com.example.android.blindchat.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -39,60 +41,50 @@ public class ChatroomActivity extends AppCompatActivity {
 
     private Chatroom mChatroom;
     private FirebaseAuth mAuth;
-    private DatabaseReference usersRef, chatRoomRef, chatRoomMessagesRef, chatRoomNameRef;
-    private String currentChatName, currentUserID;
+    private DatabaseReference usersRef, chatRoomRef, chatRoomMessagesRef;
+    private String currentUserID;
     private User currentUser;
 
     private ArrayList<Message> chat_history;
     private RecyclerView recyclerView;
     private MessageAdapter mAdapter;
+    private String key;
+    private String roomName;
+    private String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatroom);
 
-        String key = (String)getIntent().getExtras().getSerializable("key");
-        Toast.makeText(ChatroomActivity.this, currentChatName, Toast.LENGTH_SHORT).show();
+        key = getIntent().getStringExtra("key");
+        roomName = getIntent().getStringExtra("roomName");
 
+
+        mActionBar = getSupportActionBar();
+        mActionBar.setHomeButtonEnabled(true);
+        mActionBar.setDisplayHomeAsUpEnabled(true);
+
+        mSendButton =  findViewById(R.id.send_message_button);
+        mMessageEditText =  findViewById(R.id.input_group_message);
+        mActionBar.setTitle(roomName);
 
         mAuth = FirebaseAuth.getInstance();
         currentUserID = mAuth.getCurrentUser().getUid();
         usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
         chatRoomRef = FirebaseDatabase.getInstance().getReference().child("Chatrooms/" + key);
-        chatRoomNameRef = FirebaseDatabase.getInstance().getReference().child("Chatrooms/" + key + "/name");
         chatRoomMessagesRef = chatRoomRef.child("chat_history");
         GetUserInfo();
-
-        chatRoomNameRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
-                if (dataSnapshot.exists())
-                {
-                    currentChatName = dataSnapshot.getValue(String.class);
-                    mActionBar.setTitle(currentChatName);;
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
 
         recyclerView = findViewById(R.id.rv_chat_history_chatroom_activity);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
         chat_history = new ArrayList<>();
-        mAdapter = new MessageAdapter(chat_history, currentChatName);
+        mAdapter = new MessageAdapter(chat_history, userName);
         recyclerView.setAdapter(mAdapter);
 
         InitializeFields();
-
-
 
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,12 +124,7 @@ public class ChatroomActivity extends AppCompatActivity {
     }
 
     private void InitializeFields() {
-        mActionBar = getSupportActionBar();
-        mActionBar.setHomeButtonEnabled(true);
-        mActionBar.setDisplayHomeAsUpEnabled(true);
 
-        mSendButton =  findViewById(R.id.send_message_button);
-        mMessageEditText =  findViewById(R.id.input_group_message);
 
         chatRoomRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -182,6 +169,7 @@ public class ChatroomActivity extends AppCompatActivity {
                 if (dataSnapshot.exists())
                 {
                     currentUser = dataSnapshot.getValue(User.class);
+                    userName = currentUser.getUsername();
                     TryToAddUserToRoom();
                 }
             }
@@ -215,13 +203,30 @@ public class ChatroomActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.chatroom_info, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 this.finish();
                 return true;
+            case R.id.action_info:
+                openInfoActivity(key);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    public void openInfoActivity(String roomKey){
+        Intent intent = new Intent(this, ChatroomInfoActivity.class);
+        intent.putExtra("roomKey", roomKey);
+        startActivity(intent);
+    }
+
+
 }

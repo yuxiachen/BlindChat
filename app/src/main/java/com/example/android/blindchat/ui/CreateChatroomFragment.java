@@ -64,7 +64,7 @@ public class CreateChatroomFragment extends Fragment {
     }
 
     public void createNewChatroom() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss");
         String currTime = simpleDateFormat.format(new Date());
         final Chatroom newChatroom = new Chatroom(topic, description, currTime);
 
@@ -75,7 +75,7 @@ public class CreateChatroomFragment extends Fragment {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(getActivity(), "Chatroom created!", Toast.LENGTH_LONG).show();
-                            openChatroom(newRoomRef.getKey());
+                            openChatroom(newRoomRef.getKey(), topic);
                         } else {
                             Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         }
@@ -83,9 +83,10 @@ public class CreateChatroomFragment extends Fragment {
                 });
     }
 
-    private void openChatroom(String key) {
+    private void openChatroom(String key, String topic) {
         Intent intent = new Intent(getActivity(), ChatroomActivity.class);
         intent.putExtra("key", key);
+        intent.putExtra("roomName", topic);
         startActivity(intent);
     }
 
