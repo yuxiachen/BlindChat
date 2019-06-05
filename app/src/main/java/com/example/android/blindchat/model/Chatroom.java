@@ -11,6 +11,7 @@ public class Chatroom implements Serializable {
     private float longitude;
     private float latitude;
     private String created_at;
+    private String school;
     private int member_number;
 
     public Chatroom(){
@@ -88,4 +89,11 @@ public class Chatroom implements Serializable {
         this.created_at = created_at;
     }
 
+    public String getSchool() {
+        return school;
+    }
+
+    public void setSchool(String school) {
+        this.school = school;
+    }
 }

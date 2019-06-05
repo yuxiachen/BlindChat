@@ -83,7 +83,6 @@ public class ChatroomActivity extends AppCompatActivity {
             public void onClick(View v) {
                 SaveMessageInfoToDatabase(mMessageEditText.getText().toString());
                 mMessageEditText.setText("");
-                recyclerView.scrollToPosition(chat_history.size() - 1);
             }
         });
     }
