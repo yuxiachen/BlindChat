@@ -92,7 +92,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_margin="50dp"
             android:layout_weight="1"
-            android:text="LOG IN" />
+            android:text="LOG IN"/>
     </LinearLayout>
 
 </LinearLayout>

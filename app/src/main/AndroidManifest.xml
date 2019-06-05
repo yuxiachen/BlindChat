@@ -36,6 +36,7 @@
         <activity android:name=".ui.MainActivity"
             android:theme="@style/AppTheme" />
         <activity android:name=".ui.ChatroomActivity"
+            android:parentActivityName=".ui.MainActivity"
             android:theme="@style/AppThemeWithActionBar" />
         <activity android:name=".ui.ChatroomInfoActivity"
             android:theme="@style/AppThemeWithActionBar" />
