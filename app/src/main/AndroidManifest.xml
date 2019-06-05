@@ -5,8 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -15,7 +13,6 @@
         android:roundIcon="@mipmap/ic_launcher_round_shadow"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.NotificationActivity"></activity>
         <activity
             android:name=".ui.SplashActivity"
             android:theme="@style/AppSplashTheme">
@@ -25,27 +22,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ui.InitActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".ui.LoginActivity"
-            android:theme="@style/AppThemeWithActionBar" />
-        <activity
-            android:name=".ui.SignupActivity"
-            android:theme="@style/AppThemeWithActionBar" />
-        <activity
-            android:name=".ui.PasswordResetActivity"
-            android:theme="@style/AppThemeWithActionBar" />
-        <activity
-            android:name=".ui.MainActivity"
+            android:theme="@style/AppThemeWithActionBar"/>
+        <activity android:name=".ui.SignupActivity"
+            android:theme="@style/AppThemeWithActionBar"/>
+        <activity android:name=".ui.PasswordResetActivity"
+            android:theme="@style/AppThemeWithActionBar"/>
+        <activity android:name=".ui.MainActivity"
             android:theme="@style/AppTheme" />
-        <activity
-            android:name=".ui.ChatroomActivity"
+        <activity android:name=".ui.ChatroomActivity"
+            android:parentActivityName=".ui.MainActivity"
             android:theme="@style/AppThemeWithActionBar" />
-        <activity
-            android:name=".ui.ChatroomInfoActivity"
-            android:theme="@style/AppTheme" />
+        <activity android:name=".ui.ChatroomInfoActivity"
+            android:theme="@style/AppThemeWithActionBar" />
         <activity android:name=".ui.ChangeUsernameActivity"
             android:theme="@style/AppThemeWithActionBar"/>
         <activity android:name=".ui.ChangePasswordActivity"

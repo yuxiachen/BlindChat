@@ -6,57 +6,93 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
-        android:id="@+id/textView1"
-        android:layout_width="0dp"
+        android:id="@+id/tv_topic_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginBottom="15dp"
-        android:text="Topic"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="24dp"
+        android:text="Topic: "
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/topic_fragment_create"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/topic_fragment_create"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="48dp"
+        android:id="@+id/topic_activity_chatroom_info"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="14dp"
         android:text="Topic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView1" />
+        app:layout_constraintLeft_toRightOf="@id/tv_topic_title"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_topic_title" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/tv_description_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="24dp"
+        android:text="Description: "
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topic_activity_chatroom_info" />
+
+    <TextView
+        android:id="@+id/tv_description_activity_chatroom_info"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="48dp"
-        android:text="Description"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topic_fragment_create" />
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginRight="32dp"
+        android:text="This is a super long long long long destription"
+        app:layout_constraintLeft_toRightOf="@+id/tv_description_title"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topic_activity_chatroom_info"/>
 
     <TextView
-        android:id="@+id/info_description"
-        android:layout_width="0dp"
-        android:layout_height="182dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="48dp"
-        android:text="Description"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:id="@+id/tv_member_live"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="24dp"
+        android:text="Member live: "
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_description_activity_chatroom_info" />
+
+    <TextView
+        android:id="@+id/tv_memberNum_activity_chatroom_info"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginRight="32dp"
+        android:text="10"
+        app:layout_constraintLeft_toRightOf="@+id/tv_member_live"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_description_activity_chatroom_info"/>
+
+    <TextView
+        android:id="@+id/tv_time_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="24dp"
+        android:text="Create At: "
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_memberNum_activity_chatroom_info" />
+
+    <TextView
+        android:id="@+id/tv_create_time_activity_chatroom_info"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginRight="32dp"
+        android:text="Jun 5, 2019"
+        app:layout_constraintLeft_toRightOf="@+id/tv_member_live"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_memberNum_activity_chatroom_info"/>
 
     <Button
         android:id="@+id/info_join"
@@ -66,6 +102,7 @@
         android:layout_marginBottom="168dp"
         android:backgroundTint="@color/colorAccent"
         android:text="Join"
+        android:onClick="join"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -77,6 +114,7 @@
         android:layout_marginBottom="168dp"
         android:backgroundTint="@color/colorAccent"
         android:text="Leave"
+        android:onClick="exit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

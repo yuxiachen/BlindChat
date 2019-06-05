@@ -1,18 +1,10 @@
 package com.example.android.blindchat.ui;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,23 +16,28 @@ import com.example.android.blindchat.R;
 import com.example.android.blindchat.model.Chatroom;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class CreateChatroomFragment extends Fragment implements LocationListener {
+public class CreateChatroomFragment extends Fragment {
     private EditText et_topic;
     private EditText et_description;
     private Button btn_create_chatroom;
     private String topic;
     private String description;
+    private String currUid;
+    private DatabaseReference newRoomRef;
+    private DatabaseReference joinedUserRef;
+    private DatabaseReference joinedRoomRef;
+    private String roomKey;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create, null);
-
         return view;
     }
 
@@ -50,6 +47,7 @@ public class CreateChatroomFragment extends Fragment implements LocationListener
         et_topic = view.findViewById(R.id.topic_fragment_create);
         et_description = view.findViewById(R.id.description_fragment_create);
         btn_create_chatroom = view.findViewById(R.id.btn_create_chatroom_fragment_create);
+        currUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         btn_create_chatroom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,28 +71,22 @@ public class CreateChatroomFragment extends Fragment implements LocationListener
     }
 
     public void createNewChatroom() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy-hh-mm-ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss");
         String currTime = simpleDateFormat.format(new Date());
-        final Chatroom newChatroom = new Chatroom(topic, description, currTime);
 
-        //for location feature
-        if (locate() != null) {
-            newChatroom.setLongitude((float) locate().getLongitude());
-            newChatroom.setLatitude((float) locate().getLatitude());
-        }
-        else {
-            newChatroom.setLatitude((float) 37.35);
-            newChatroom.setLongitude((float) -121.94);
-        }
-        final DatabaseReference newRoomRef = FirebaseDatabase.getInstance().getReference("Chatrooms").push();
+        newRoomRef = FirebaseDatabase.getInstance().getReference("Chatrooms").push();
+        roomKey = newRoomRef.getKey();
+        final Chatroom newChatroom = new Chatroom(roomKey, topic, description, currTime);
+        newChatroom.setMember_number(1);
         newRoomRef.setValue(newChatroom)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(getActivity(), "Chatroom created!\nLatitude: " + newChatroom.getLatitude()
-                                    + "\nLongitude: " + newChatroom.getLongitude(), Toast.LENGTH_LONG).show();
-                            openChatroom(newRoomRef.getKey());
+                            Toast.makeText(getActivity(), "Chatroom created!", Toast.LENGTH_LONG).show();
+                            addUserToJoinedList();
+                            addRoomToJoinedList(newChatroom);
+                            openChatroom(roomKey, topic);
                         } else {
                             Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         }
@@ -102,45 +94,20 @@ public class CreateChatroomFragment extends Fragment implements LocationListener
                 });
     }
 
-    private void openChatroom(String key) {
+    private void addUserToJoinedList() {
+        joinedUserRef = FirebaseDatabase.getInstance().getReference("JoinedUsers").child(roomKey);
+        joinedUserRef.child(currUid).setValue(currUid);
+    }
+
+    private void addRoomToJoinedList(Chatroom chatroom) {
+        joinedRoomRef = FirebaseDatabase.getInstance().getReference("JoinedRooms").child(currUid);
+        joinedRoomRef.child(roomKey).setValue(chatroom);
+    }
+
+    private void openChatroom(String key, String topic) {
         Intent intent = new Intent(getActivity(), ChatroomActivity.class);
         intent.putExtra("key", key);
+        intent.putExtra("roomName", topic);
         startActivity(intent);
-
-    }
-
-    private Location locate() {
-        Location location;
-        LocationManager locationManager;
-        //for longtitude and latitude
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 123);
-        }
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, this);
-        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-        return location;
-    }
-    //to implement location listner
-    @Override
-    public void onLocationChanged(Location location) {
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
     }
 }
