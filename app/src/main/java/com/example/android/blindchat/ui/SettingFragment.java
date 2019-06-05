@@ -1,13 +1,7 @@
 package com.example.android.blindchat.ui;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.support.v4.app.ActivityCompat;
+import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -17,11 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.android.blindchat.R;
+import com.google.firebase.auth.FirebaseAuth;
 
-public class SettingFragment extends Fragment{
+public class SettingFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
@@ -32,29 +26,19 @@ public class SettingFragment extends Fragment{
         Button logout = (Button)view.findViewById(R.id.logout);
         Button appVersion = (Button)view.findViewById(R.id.app_version);
         Button update = (Button)view.findViewById(R.id.software_update);
-        Button notification = (Button)view.findViewById(R.id.btn_notification1);
-        Button testLocation = (Button)view.findViewById(R.id.btn_test_location);
 
         changename.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                toChangeUsername();
 
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                ChangeUsernameFragment fragment = new ChangeUsernameFragment();
-                transaction.replace(R.id.main_frame,fragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
             }
         });
 
         changepw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                ChangePasswordFragment fragment = new ChangePasswordFragment();
-                transaction.replace(R.id.main_frame,fragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
+                toChangePassword();
             }
         });
 
@@ -70,8 +54,7 @@ public class SettingFragment extends Fragment{
                 dialog.setPositiveButton("LOG OUT", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(getActivity(),InitActivity.class);
-                        startActivity(intent);
+                        signout();
                     }
                 });
                 dialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -81,7 +64,6 @@ public class SettingFragment extends Fragment{
                 });
                 dialog.create();
                 dialog.show();
-
             }
         });
 
@@ -113,16 +95,25 @@ public class SettingFragment extends Fragment{
             }
         });
 
-        notification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(),NotificationActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
         return view;
     }
+
+    private void signout() {
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(getActivity(),InitActivity.class);
+        startActivity(intent);
+    }
+
+    private void toChangeUsername() {
+        Intent intent = new Intent(getActivity(),ChangeUsernameActivity.class);
+        startActivity(intent);
+    }
+
+    private void toChangePassword() {
+        Intent intent = new Intent(getActivity(),ChangePasswordActivity.class);
+        startActivity(intent);
+    }
+
+
 
 }

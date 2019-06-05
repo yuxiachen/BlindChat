@@ -63,7 +63,14 @@ public class LoginActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signInWithEmail();
+                if(loginEmail.length()==0){
+                    Toast.makeText(getApplicationContext(),"Please enter email",Toast.LENGTH_LONG).show();
+                }
+                if(loginPassword.length()==0){
+                    Toast.makeText(getApplicationContext(),"Please enter password",Toast.LENGTH_LONG).show();
+                }
+                else
+                    signInWithEmail();
             }
         });
 

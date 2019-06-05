@@ -46,6 +46,10 @@
         <activity
             android:name=".ui.ChatroomInfoActivity"
             android:theme="@style/AppTheme" />
+        <activity android:name=".ui.ChangeUsernameActivity"
+            android:theme="@style/AppThemeWithActionBar"/>
+        <activity android:name=".ui.ChangePasswordActivity"
+            android:theme="@style/AppThemeWithActionBar"/>
     </application>
 
 </manifest>
