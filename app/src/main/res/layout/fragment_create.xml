@@ -15,66 +15,60 @@
         android:layout_marginTop="48dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/topic_fragment_create"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginRight="48dp"
         android:layout_marginLeft="48dp"
-        android:hint="Topic"
         android:layout_marginTop="32dp"
+        android:layout_marginRight="48dp"
+        android:hint="Topic"
+        android:backgroundTint="@color/colorPrimaryDark"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title_fragment_create"/>
+        app:layout_constraintTop_toBottomOf="@+id/title_fragment_create" />
+
     <TextView
         android:id="@+id/description_title_fragment_create"
-        android:text="Description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:text="Description"
         android:textSize="20dp"
         app:layout_constraintLeft_toLeftOf="@+id/topic_fragment_create"
-        app:layout_constraintTop_toBottomOf="@+id/topic_fragment_create"/>
-    
-    <View
-        android:id="@+id/border_fragment_create"
-        android:layout_width="0dp"
-        android:layout_height="160dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="48dp"
-        android:layout_marginRight="48dp"
-        android:background="@drawable/view_border"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/description_title_fragment_create">
-        
-    </View>
+        app:layout_constraintTop_toBottomOf="@+id/topic_fragment_create" />
 
     <EditText
         android:id="@+id/description_fragment_create"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:background="@null"
+        android:layout_height="0dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="48dp"
+        android:layout_marginBottom="112dp"
+        android:background="@drawable/border"
+        android:gravity="start|top"
         android:hint="Write a description for your chatroom!"
-        android:layout_marginTop="24dp"
-        android:layout_marginLeft="52dp"
-        android:layout_marginRight="52dp"
+        android:inputType="textMultiLine"
         android:lineSpacingExtra="5dp"
+        android:padding="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_create_chatroom_fragment_create"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/description_title_fragment_create"
-        />
-    
+        app:layout_constraintTop_toBottomOf="@+id/description_title_fragment_create" />
+
     <Button
         android:id="@+id/btn_create_chatroom_fragment_create"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:backgroundTint="@color/colorAccentDark"
         android:text="CREATE CHATROOM"
-        android:backgroundTint="@color/colorAccent"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintRight_toRightOf="parent"
+        android:textColor="@color/buttontext"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent" />
+
 </android.support.constraint.ConstraintLayout>

@@ -7,27 +7,19 @@
     android:orientation="vertical"
     tools:context=".ui.LoginActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="15"
+            android:layout_height="200dp"
             android:gravity="center"
             android:text="Already Have an Account?"
             android:textSize="30sp" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_weight="5"
-            android:gravity="bottom">
+            android:layout_marginEnd="20dp">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/login_email_input"
@@ -39,26 +31,23 @@
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="124dp"
+            android:layout_height="60dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
-            android:layout_weight="5"
-            android:gravity="bottom"
             app:passwordToggleEnabled="true">
 
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/login_password_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="password"
+                android:hint="Password"
                 android:inputType="textPassword" />
         </android.support.design.widget.TextInputLayout>
 
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="5"
+            android:layout_height="50dp"
             android:orientation="horizontal">
 
             <TextView
@@ -66,21 +55,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
+                android:layout_marginTop="16dp"
                 android:layout_weight="1"
                 android:autoLink="all"
                 android:linksClickable="true"
                 android:text="Sign up"
+                android:textColor="@color/click_text"
                 android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/forget_password_link"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:layout_marginRight="20dp"
                 android:layout_weight="1"
                 android:autoLink="all"
                 android:gravity="right|center_horizontal"
                 android:linksClickable="true"
+                android:textColor="@color/click_text"
                 android:text="Forgot Password"
                 android:textSize="18sp" />
         </LinearLayout>
@@ -90,9 +83,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="50dp"
-            android:layout_weight="1"
-            android:text="LOG IN"/>
-    </LinearLayout>
+            android:layout_marginTop="80dp"
+            android:text="LOG IN"
+            android:textColor="@color/buttontext"
+            android:backgroundTint="@color/colorAccentDark"/>
 
 </LinearLayout>

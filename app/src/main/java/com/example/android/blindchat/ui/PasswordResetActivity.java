@@ -36,11 +36,9 @@ public class PasswordResetActivity extends AppCompatActivity {
         setContentView(R.layout.activity_password_reset);
 
         mActionBar = getSupportActionBar();
-        mActionBar.setTitle("Sign Up");
         mActionBar.setHomeButtonEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
 
-        pwResetUsername = (TextInputEditText)findViewById(R.id.pw_reset_username);
         pwResetEmail = (TextInputEditText)findViewById(R.id.pw_reset_email);
 
 
