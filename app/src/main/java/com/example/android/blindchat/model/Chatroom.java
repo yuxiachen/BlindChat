@@ -48,6 +48,7 @@ public class Chatroom implements Serializable {
     }
 
     public int getMember_number() {
+        
         return member_number;
     }
 
