@@ -7,11 +7,10 @@
 
     <TextView
         android:id="@+id/tv_topic_title"
-        android:layout_width="60dp"
+        android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="48dp"
-        android:gravity="center_vertical"
         android:text="Topic: "
         android:textSize="20sp"
         android:textStyle="bold"
@@ -20,15 +19,16 @@
 
     <TextView
         android:id="@+id/topic_activity_chatroom_info"
-        android:layout_width="200dp"
-        android:layout_height="30dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
+        android:layout_marginLeft="32dp"
         android:layout_marginEnd="32dp"
-        android:gravity="center_vertical"
         android:text="Topic"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_topic_title"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/tv_topic_title"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -45,15 +45,17 @@
 
     <TextView
         android:id="@+id/tv_description_activity_chatroom_info"
-        android:layout_width="200dp"
-        android:layout_height="150dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginRight="32dp"
+        android:layout_marginLeft="12dp"
         android:gravity="start"
         android:paddingTop="1dp"
         android:text="This is a super long long long long destription"
         android:textSize="18sp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_description_title" />
+        app:layout_constraintTop_toTopOf="@+id/tv_description_title"
+        app:layout_constraintLeft_toRightOf="@id/tv_description_title"/>
 
     <TextView
         android:id="@+id/tv_member_live"
@@ -61,6 +63,7 @@
         android:layout_height="30dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="24dp"
+        android:layout_marginLeft="32dp"
         android:text="Members live: "
         android:textSize="20sp"
         android:textStyle="bold"
@@ -69,14 +72,17 @@
 
     <TextView
         android:id="@+id/tv_memberNum_activity_chatroom_info"
-        android:layout_width="32dp"
+        android:layout_width="0dp"
         android:layout_height="30dp"
-        android:layout_marginEnd="160dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginLeft="16dp"
         android:gravity="center_vertical"
         android:text="10"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_member_live"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintLeft_toRightOf="@id/tv_member_live"
+        app:layout_constraintRight_toRightOf="parent"
+        />
 
     <TextView
         android:id="@+id/tv_time_title"
@@ -92,14 +98,16 @@
 
     <TextView
         android:id="@+id/tv_create_time_activity_chatroom_info"
-        android:layout_width="128dp"
+        android:layout_width="0dp"
         android:layout_height="30dp"
-        android:layout_marginRight="64dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginLeft="16dp"
         android:gravity="center_vertical"
         android:text="Jun 5, 2019"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_time_title"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/tv_time_title"/>
 
     <Button
         android:id="@+id/info_join"
