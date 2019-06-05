@@ -24,13 +24,13 @@ import com.google.firebase.auth.FirebaseUser;
 import static android.support.constraint.Constraints.TAG;
 
 public class ChangePasswordActivity extends AppCompatActivity {
-    private EditText currentpw;
-    private EditText newpw;
-    private EditText newpwagain;
-    private Button savepw;
-    private String scurrentpw;
-    private String snewpw;
-    private String snewpwagain;
+    private EditText currentPwd;
+    private EditText newPwd;
+    private EditText newPwdConfirm;
+    private Button saveBtn;
+    private String sCurrentPwd;
+    private String sNewPwd;
+    private String sNewPwdConfirm;
     private boolean isValidInput;
     private FirebaseAuth mAuth;
     private ActionBar mActionBar;
@@ -45,13 +45,13 @@ public class ChangePasswordActivity extends AppCompatActivity {
         mActionBar.setHomeButtonEnabled(true);
         mActionBar.setDisplayHomeAsUpEnabled(true);
 
-        currentpw = (TextInputEditText) findViewById(R.id.change_un_input);
-        newpw = (TextInputEditText) findViewById(R.id.change_newpw_input);
-        newpwagain = (TextInputEditText) findViewById(R.id.change_newpw_input1);
+        currentPwd = (TextInputEditText) findViewById(R.id.change_un_input);
+        newPwd = (TextInputEditText) findViewById(R.id.change_newpw_input);
+        newPwdConfirm = (TextInputEditText) findViewById(R.id.change_newpw_input1);
 
-        savepw =(Button)findViewById(R.id.bt_pw_save) ;
+        saveBtn =(Button)findViewById(R.id.bt_pw_save) ;
 
-        savepw.setOnClickListener(new View.OnClickListener() {
+        saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 checkInputIsValid();
@@ -60,35 +60,37 @@ public class ChangePasswordActivity extends AppCompatActivity {
     }
 
     private void checkInputIsValid() {
-        scurrentpw = currentpw.getText().toString().trim();
-        snewpw = newpw.getText().toString().trim();
-        snewpwagain = newpwagain.getText().toString().trim();
+        sCurrentPwd = currentPwd.getText().toString().trim();
+        sNewPwd = newPwd.getText().toString().trim();
+        sNewPwdConfirm = newPwdConfirm.getText().toString().trim();
         isValidInput = true;
-        if (scurrentpw.isEmpty() ){
-            currentpw.requestFocus();
+        if (sCurrentPwd.isEmpty() ){
+            currentPwd.requestFocus();
             isValidInput = false;
             Toast.makeText(getApplicationContext(), getString(R.string.input_password_error), Toast.LENGTH_LONG).show();
         }
-        if (!snewpw.equals(snewpwagain)) {
-            newpwagain.requestFocus();
+        if (!sNewPwd.equals(sNewPwdConfirm)) {
+            newPwdConfirm.requestFocus();
             isValidInput = false;
             Toast.makeText(getApplicationContext(), getString(R.string.input_password_not_consistent), Toast.LENGTH_LONG).show();
         }
-        if (isValidInput) {
-            updatePassword();
+        if (sNewPwd.equals(sNewPwdConfirm)) {
+            if(sNewPwd.length() <= 5){
+                Toast.makeText(getApplicationContext(), "The password should be at least 6 characters!", Toast.LENGTH_SHORT).show();
+            }else updatePassword();
         }
     }
 
     private void updatePassword() {
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         final String email =user.getEmail();
-        AuthCredential credential = EmailAuthProvider.getCredential(email,scurrentpw);
+        AuthCredential credential = EmailAuthProvider.getCredential(email, sCurrentPwd);
 
         user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    user.updatePassword(snewpw).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    user.updatePassword(sNewPwd).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
