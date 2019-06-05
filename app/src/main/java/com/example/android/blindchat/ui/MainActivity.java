@@ -88,14 +88,6 @@ public class MainActivity extends AppCompatActivity {
         transaction.addToBackStack(null);
         transaction.commit();
     }
-    public void toSearchFragment(String query) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        SearchFragment searchFragment = new SearchFragment();
-        transaction.replace(R.id.main_frame, searchFragment);
-        transaction.commit();
-    }
-
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
