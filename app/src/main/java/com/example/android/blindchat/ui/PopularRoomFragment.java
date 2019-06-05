@@ -41,7 +41,10 @@ public class PopularRoomFragment extends Fragment implements ChatroomAdapter.OnR
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mostPopularList = view.findViewById(R.id.rv_room_list);
         mostPopularList.setHasFixedSize(true);
-        mostPopularList.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        mostPopularList.setLayoutManager(linearLayoutManager);
         popularChatrooms = new ArrayList<>();
         popularChatroomKeys = new ArrayList<>();
         popularRoomListAdapter = new ChatroomAdapter(popularChatrooms, popularChatroomKeys, this);

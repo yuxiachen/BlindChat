@@ -40,7 +40,10 @@ public class NewestRoomFragment extends Fragment implements ChatroomAdapter.OnRo
         super.onViewCreated(view, savedInstanceState);
         newestList = view.findViewById(R.id.rv_room_list);
         newestList.setHasFixedSize(true);
-        newestList.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        newestList.setLayoutManager(linearLayoutManager);
         newestChatrooms = new ArrayList<>();
         newestChatroomKeys = new ArrayList<>();
         newestRoomListAdapter = new ChatroomAdapter(newestChatrooms, newestChatroomKeys, this);

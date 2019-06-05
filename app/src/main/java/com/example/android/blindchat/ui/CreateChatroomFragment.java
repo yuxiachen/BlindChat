@@ -79,7 +79,7 @@ public class CreateChatroomFragment extends Fragment {
 
 
     public void createNewChatroom() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd-hh-mm-ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
         String currTime = simpleDateFormat.format(new Date());
 
         newRoomRef = FirebaseDatabase.getInstance().getReference("Chatrooms").push();
