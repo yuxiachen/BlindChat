@@ -88,7 +88,7 @@
         android:drawableEnd="@drawable/ic_chevron_right_black_24dp"
         android:gravity="fill"
         android:paddingLeft="30dp"
-        android:text="FQA"
+        android:text="FAQ"
         android:textAllCaps="false" />
 
     <TextView
@@ -99,26 +99,6 @@
         android:text="Notification"
         android:textSize="15dp"/>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="xxxxxxxx"
-        android:paddingLeft="30dp"
-        android:textAllCaps="false"
-        android:drawableEnd="@drawable/ic_chevron_right_black_24dp"
-        android:gravity="fill"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        />
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="xxxxxxxx"
-        android:paddingLeft="30dp"
-        android:textAllCaps="false"
-        android:drawableEnd="@drawable/ic_chevron_right_black_24dp"
-        android:gravity="fill"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        />
 
 
 
