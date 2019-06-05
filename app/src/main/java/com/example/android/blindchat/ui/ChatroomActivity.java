@@ -1,14 +1,14 @@
 package com.example.android.blindchat.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.example.android.blindchat.R;
 import com.example.android.blindchat.adapter.MessageAdapter;
-import com.example.android.blindchat.model.Chatroom;
 import com.example.android.blindchat.model.Message;
 import com.example.android.blindchat.model.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,62 +36,46 @@ public class ChatroomActivity extends AppCompatActivity {
     private EditText mMessageEditText;
     private ImageButton mSendButton;
 
-    private Chatroom mChatroom;
-    private FirebaseAuth mAuth;
-    private DatabaseReference usersRef, chatRoomRef, chatRoomMessagesRef, chatRoomNameRef;
-    private String currentChatName, currentUserID;
-    private User currentUser;
+    private DatabaseReference userRef, chatHistoryRef, joinedUserRef;
+    private String currentUserID;
 
     private ArrayList<Message> chat_history;
     private RecyclerView recyclerView;
     private MessageAdapter mAdapter;
+    private String key;
+    private String roomName;
+    private String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatroom);
 
-        String key = (String)getIntent().getExtras().getSerializable("key");
-        Toast.makeText(ChatroomActivity.this, currentChatName, Toast.LENGTH_SHORT).show();
+        key = getIntent().getStringExtra("key");
+        roomName = getIntent().getStringExtra("roomName");
 
+        mActionBar = getSupportActionBar();
+        mActionBar.setHomeButtonEnabled(true);
+        mActionBar.setDisplayHomeAsUpEnabled(true);
 
-        mAuth = FirebaseAuth.getInstance();
-        currentUserID = mAuth.getCurrentUser().getUid();
-        usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
-        chatRoomRef = FirebaseDatabase.getInstance().getReference().child("Chatrooms/" + key);
-        chatRoomNameRef = FirebaseDatabase.getInstance().getReference().child("Chatrooms/" + key + "/name");
-        chatRoomMessagesRef = chatRoomRef.child("chat_history");
-        GetUserInfo();
+        mSendButton =  findViewById(R.id.send_message_button);
+        mMessageEditText =  findViewById(R.id.input_group_message);
+        mActionBar.setTitle(roomName);
+        currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        chatRoomNameRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
-                if (dataSnapshot.exists())
-                {
-                    currentChatName = dataSnapshot.getValue(String.class);
-                    mActionBar.setTitle(currentChatName);;
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
+        userRef = FirebaseDatabase.getInstance().getReference("Users").child(currentUserID);
+        chatHistoryRef = FirebaseDatabase.getInstance().getReference("ChatHistory").child(key);
+        joinedUserRef = FirebaseDatabase.getInstance().getReference("JoinedUsers").child(key);
+        userRef.addValueEventListener(UserListener);
+        chatHistoryRef.addValueEventListener(ChatHistoryListener);
 
         recyclerView = findViewById(R.id.rv_chat_history_chatroom_activity);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
         chat_history = new ArrayList<>();
-        mAdapter = new MessageAdapter(chat_history, currentChatName);
+        mAdapter = new MessageAdapter(chat_history, userName);
         recyclerView.setAdapter(mAdapter);
-
-        InitializeFields();
-
-
 
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,96 +85,41 @@ public class ChatroomActivity extends AppCompatActivity {
                 mMessageEditText.setText("");
             }
         });
-
-
     }
 
-    @Override
-    protected void onStart(){
-        super.onStart();
-        chatRoomMessagesRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    chat_history.clear();
-
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        Message currMessage = snapshot.getValue(Message.class);
-                        chat_history.add(currMessage);
-                    }
-                    mAdapter.notifyDataSetChanged();
+    private ValueEventListener ChatHistoryListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            if (dataSnapshot.exists()) {
+                chat_history.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Message currMessage = snapshot.getValue(Message.class);
+                    chat_history.add(currMessage);
                 }
-
+                mAdapter.notifyDataSetChanged();
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+        }
 
-            }
-        });
-    }
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-    private void InitializeFields() {
-        mActionBar = getSupportActionBar();
-        mActionBar.setHomeButtonEnabled(true);
-        mActionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    };
 
-        mSendButton =  findViewById(R.id.send_message_button);
-        mMessageEditText =  findViewById(R.id.input_group_message);
-
-        chatRoomRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
-                if (dataSnapshot.exists())
-                {
-                    mChatroom = dataSnapshot.getValue(Chatroom.class);
-                    TryToAddUserToRoom();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void TryToAddUserToRoom() {
-        if (mChatroom !=null && currentUser != null) {
-            boolean joined = false;
-            for (User user : mChatroom.getJoined_users()) {
-                if (user.getEmail().equals(currentUser.getEmail())) {
-                    joined = true;
-                }
-            }
-            if (!joined) {
-                ArrayList<User> users = mChatroom.getJoined_users();
-                users.add(currentUser);
-                mChatroom.setJoined_users(users);
-                chatRoomRef.setValue(mChatroom);
+    private ValueEventListener UserListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            if (dataSnapshot.exists()) {
+                userName = dataSnapshot.getValue(User.class).getUsername();
             }
         }
-    }
 
-    private void GetUserInfo(){
-        usersRef.child(currentUserID).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
-                if (dataSnapshot.exists())
-                {
-                    currentUser = dataSnapshot.getValue(User.class);
-                    TryToAddUserToRoom();
-                }
-            }
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
+        }
+    };
 
     private void SaveMessageInfoToDatabase(String message_text){
         if (TextUtils.isEmpty(message_text)) {
@@ -207,11 +135,14 @@ public class ChatroomActivity extends AppCompatActivity {
         String currentTime = currentTimeFormat.format(calForTime.getTime());
 
 
-        Message message = new Message( message_text, currentTime, currentDate, currentUser.getUsername());
-        if (mChatroom != null) {
-            mChatroom.getChat_history().add(message);
-            chatRoomRef.setValue(mChatroom);
-        }
+        Message message = new Message( message_text, currentTime, currentDate, userName);
+        chatHistoryRef.push().setValue(message);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.chatroom_info, menu);
+        return true;
     }
 
     @Override
@@ -220,8 +151,18 @@ public class ChatroomActivity extends AppCompatActivity {
             case android.R.id.home:
                 this.finish();
                 return true;
+            case R.id.action_info:
+                openInfoActivity(key);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    public void openInfoActivity(String roomKey){
+        Intent intent = new Intent(this, ChatroomInfoActivity.class);
+        intent.putExtra("roomKey", roomKey);
+        startActivity(intent);
+    }
+
 }

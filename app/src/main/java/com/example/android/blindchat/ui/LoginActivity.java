@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView forgetPasswordLink;
     private Button login;
     private ActionBar mActionBar;
+    private Boolean isValidInput;
 
 
     @Override
@@ -62,17 +64,30 @@ public class LoginActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(loginEmail.length()==0){
-                    Toast.makeText(getApplicationContext(),"Please enter email",Toast.LENGTH_LONG).show();
-                }
-                if(loginPassword.length()==0){
-                    Toast.makeText(getApplicationContext(),"Please enter password",Toast.LENGTH_LONG).show();
-                }
-                else
+                if (checkInputIsValid()) {
                     signInWithEmail();
+                }
             }
         });
 
+    }
+
+    private boolean checkInputIsValid() {
+        String password = loginPassword.getText().toString().trim();
+        String email = loginEmail.getText().toString().trim();
+        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            loginEmail.requestFocus();
+            Toast.makeText(getApplicationContext(), getString(R.string.input_email_error), Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if (password.isEmpty()) {
+            loginPassword.requestFocus();
+            isValidInput = false;
+            Toast.makeText(getApplicationContext(), getString(R.string.input_password_error), Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
     }
 
     private void signInWithEmail(){
