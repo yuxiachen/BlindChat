@@ -40,7 +40,6 @@ public class JoinedRoomFragment extends Fragment implements ChatroomAdapter.OnRo
     private DatabaseReference usersRef;
     private String userName;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recycler_view, null);

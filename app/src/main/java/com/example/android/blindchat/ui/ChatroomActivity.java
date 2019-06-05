@@ -212,7 +212,7 @@ public class ChatroomActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                this.finish();
+                onBackPressed();
                 return true;
             case R.id.action_info:
                 openInfoActivity(key);
@@ -226,6 +226,13 @@ public class ChatroomActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ChatroomInfoActivity.class);
         intent.putExtra("roomKey", roomKey);
         startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        return;
     }
 
 
