@@ -72,7 +72,7 @@ public class SettingFragment extends Fragment {
             public void onClick(View v) {
                 AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
                         .setTitle("Application Version")
-                        .setMessage("Beta 1.0")
+                        .setMessage("Blind Chat Beta 1.0")
                         .setCancelable(false)
                         .create();
 
