@@ -111,16 +111,15 @@ public class JoinedRoomFragment extends Fragment implements ChatroomAdapter.OnRo
 
         }
     };
-
-
-    private void openChatroomActivity(String key) {
+    private void openChatroomActivity(String key, String roomName) {
         Intent intent = new Intent(getActivity(), ChatroomActivity.class);
         intent.putExtra("key", key);
+        intent.putExtra("roomName", roomName);
         startActivity(intent);
     }
 
     @Override
-    public void OnRoomItemClicked(String key) {
-        openChatroomActivity(key);
+    public void OnRoomItemClicked(String key, String roomName) {
+        openChatroomActivity(key, roomName);
     }
 }

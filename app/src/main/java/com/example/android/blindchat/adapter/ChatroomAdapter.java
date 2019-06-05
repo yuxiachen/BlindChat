@@ -46,7 +46,7 @@ public class ChatroomAdapter extends RecyclerView.Adapter<ChatroomAdapter.RoomIt
     @Override
     public void onClick(View v) {
         int position = ((RecyclerView) v.getParent()).getChildAdapterPosition(v);
-        mListener.OnRoomItemClicked(mRoomKeys.get(position));
+        mListener.OnRoomItemClicked(mRoomKeys.get(position), mRoomList.get(position).getName());
     }
 
     public static class RoomItemViewHolder extends RecyclerView.ViewHolder{
@@ -67,6 +67,6 @@ public class ChatroomAdapter extends RecyclerView.Adapter<ChatroomAdapter.RoomIt
     }
 
     public interface OnRoomItemClickedListener{
-        void OnRoomItemClicked(String key);
+        void OnRoomItemClicked(String key, String roomName);
     }
 }

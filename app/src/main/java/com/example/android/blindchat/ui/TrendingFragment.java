@@ -48,7 +48,7 @@ public class TrendingFragment extends Fragment{
         searchInTrending.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                ((MainActivity)getActivity()).toSearchFragment();
+                ((MainActivity)getActivity()).toSearchFragment(query);
                 return false;
             }
 
