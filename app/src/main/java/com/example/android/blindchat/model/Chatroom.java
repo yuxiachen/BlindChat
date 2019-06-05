@@ -89,4 +89,11 @@ public class Chatroom implements Serializable {
         this.created_at = created_at;
     }
 
+    public String getSchool() {
+        return school;
+    }
+
+    public void setSchool(String school) {
+        this.school = school;
+    }
 }

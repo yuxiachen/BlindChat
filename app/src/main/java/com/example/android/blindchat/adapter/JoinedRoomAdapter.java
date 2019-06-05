@@ -2,6 +2,7 @@ package com.example.android.blindchat.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,15 +52,16 @@ public class JoinedRoomAdapter extends RecyclerView.Adapter<JoinedRoomAdapter.Ro
 
     public static class RoomItemViewHolder extends RecyclerView.ViewHolder{
         private TextView roomNameTextView;
-        //private TextView roomSchoolTextView;
+        private TextView roomSchoolTextView;
 
         public RoomItemViewHolder(@NonNull View itemView) {
             super(itemView);
             roomNameTextView = itemView.findViewById(R.id.name_item_joined_room);
-            //roomSchoolTextView = itemView.findViewById(R.id.school_item_joined_room);
+            roomSchoolTextView = itemView.findViewById(R.id.school_item_joined_room);
         }
         public void updateUI(Chatroom chatroom) {
             roomNameTextView.setText(chatroom.getName());
+            roomSchoolTextView.setText(chatroom.getSchool());
         }
     }
 

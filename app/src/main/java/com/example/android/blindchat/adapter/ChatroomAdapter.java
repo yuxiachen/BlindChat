@@ -63,6 +63,7 @@ public class ChatroomAdapter extends RecyclerView.Adapter<ChatroomAdapter.RoomIt
         public void updateUI(Chatroom chatroom) {
             roomNameTextView.setText(chatroom.getName());
             roomMemberNumTextView.setText(Integer.toString(chatroom.getMember_number()));
+            roomSchoolTextView.setText(chatroom.getSchool());
         }
     }
 
