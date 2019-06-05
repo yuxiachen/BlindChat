@@ -76,13 +76,14 @@ public class ChatroomActivity extends AppCompatActivity {
         chat_history = new ArrayList<>();
         mAdapter = new MessageAdapter(chat_history, userName);
         recyclerView.setAdapter(mAdapter);
+        recyclerView.scrollToPosition(chat_history.size() - 1);
 
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SaveMessageInfoToDatabase(mMessageEditText.getText().toString());
-
                 mMessageEditText.setText("");
+                recyclerView.scrollToPosition(chat_history.size() - 1);
             }
         });
     }
@@ -96,6 +97,7 @@ public class ChatroomActivity extends AppCompatActivity {
                     Message currMessage = snapshot.getValue(Message.class);
                     chat_history.add(currMessage);
                 }
+                recyclerView.scrollToPosition(chat_history.size() - 1);
                 mAdapter.notifyDataSetChanged();
             }
 
@@ -149,7 +151,7 @@ public class ChatroomActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                this.finish();
+                onBackPressed();
                 return true;
             case R.id.action_info:
                 openInfoActivity(key);
@@ -157,6 +159,13 @@ public class ChatroomActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        return;
     }
 
     public void openInfoActivity(String roomKey){
