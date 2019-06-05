@@ -54,7 +54,7 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
         notificationAdapter = new NotificationAdapter(messages, messageKeys, this);
 
         recyclerView.setAdapter(notificationAdapter);
-        Query query = FirebaseDatabase.getInstance().getReference("Chatrooms");
+        Query query = FirebaseDatabase.getInstance().getReference("ChatHistory");
         query.addListenerForSingleValueEvent(notificationEventListener);
     }
 
@@ -64,24 +64,22 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
             if (dataSnapshot.exists()) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Chatroom chatroom = snapshot.getValue(Chatroom.class);
-                    String key = snapshot.getKey();
-                    int i = 0;
-                    for (Message message : chatroom.getChat_history()) {
+                for (DataSnapshot roomSnapshot : dataSnapshot.getChildren()) {
+                    Chatroom chatroom = roomSnapshot.getValue(Chatroom.class);
+                    String roomSnapshotKey = roomSnapshot.getKey();
 
-                        //afraid of messing up firebase assign room name arbitrarily
-                        message.setRoomName("Room name here" + i);
+                    int i = 0;
+                    for (DataSnapshot messageSnapshot : roomSnapshot.getChildren()) {
+                        Message message = messageSnapshot.getValue(Message.class);
+                        message.setRoomName(chatroom.getName());
+                        message.setRoom(chatroom);
+                        message.setRoomKey(roomSnapshotKey);
+                        Log.d("room key:", roomSnapshotKey);
                         messages.add(message);
+                        messageKeys.add(messageSnapshot.getKey());
                         i++;
                     }
 
-
-
-                    messageKeys.add(key);
-
-                    //don't know why, but this loop gives nullpointerexception if don't break here
-                    break;
                 }
 
                 notificationAdapter.notifyDataSetChanged();
@@ -102,9 +100,12 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
         startActivity(intent);
     }
 
+    //only clicked message will pop up system message alert for now
     @Override
     public void OnNotificationClicked(Message message, String key) {
-        openChatroomActivity(message.getRoom(), key);
+
+
+        openChatroomActivity(message.getRoom(), message.getRoomKey());
 
         //to test the alarm of the notification
         showNotification(message, 1, key);
@@ -127,7 +128,6 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
         intent.putExtra("key", key);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, notificationID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
         builder.setContentTitle(message.getRoomName())
                 .setContentText(message.getName() + ":\n" + message.getMessage())
@@ -143,7 +143,9 @@ public class NotificationActivity extends AppCompatActivity implements Notificat
         Notification notification = builder.build();
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
+        Log.d("here works", "...............5");
         notificationManagerCompat.notify(notificationID, notification);
+        Log.d("here works", "...............6");
 
 
     }

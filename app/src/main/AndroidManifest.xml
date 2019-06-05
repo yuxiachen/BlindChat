@@ -44,6 +44,8 @@
             android:theme="@style/AppThemeWithActionBar"/>
         <activity android:name=".ui.ChangePasswordActivity"
             android:theme="@style/AppThemeWithActionBar"/>
+        <activity android:name=".ui.NotificationActivity"
+            android:theme="@style/AppThemeWithActionBar"/>
     </application>
 
 </manifest>

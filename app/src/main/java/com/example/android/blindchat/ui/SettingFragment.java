@@ -27,6 +27,9 @@ public class SettingFragment extends Fragment {
         Button appVersion = (Button)view.findViewById(R.id.app_version);
         Button update = (Button)view.findViewById(R.id.software_update);
 
+        //to test notification
+        Button notification = (Button)view.findViewById(R.id.btn_notification1);
+
         changename.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,6 +95,15 @@ public class SettingFragment extends Fragment {
 
                 alertDialog.show();
                 alertDialog.setCanceledOnTouchOutside(true);
+            }
+        });
+
+        //only for testing notification
+        notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),NotificationActivity.class);
+                startActivity(intent);
             }
         });
 

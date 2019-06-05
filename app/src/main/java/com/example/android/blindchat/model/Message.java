@@ -7,7 +7,7 @@ public class Message implements Serializable {
     private String message, time, date, name;
 
     //for notification title
-    private String roomName;
+    private String roomName, roomKey;
     private Chatroom chatroom;
 
     public Message(){
@@ -72,9 +72,12 @@ public class Message implements Serializable {
         this.roomName = rName;
     }
 
-    //return new chatroom here need to be fixed
+    public void setRoomKey(String rKey) {this.roomKey = rKey; }
+
+    public String getRoomKey() {return roomKey;}
+
     public Chatroom getRoom() {
-        return new Chatroom();
+        return chatroom;
     }
 
     public void setRoom(Chatroom cRoom) {
