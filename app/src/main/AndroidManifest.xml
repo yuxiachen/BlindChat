@@ -15,7 +15,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.SplashActivity"
-            android:theme="@style/AppSplashTheme">
+            android:theme="@style/AppSplashTheme"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,26 +26,35 @@
 
         <activity
             android:name=".ui.InitActivity"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.LoginActivity"
-            android:theme="@style/AppThemeWithActionBar"/>
+            android:theme="@style/AppThemeWithActionBar"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ui.SignupActivity"
-            android:theme="@style/AppThemeWithActionBar"/>
+            android:theme="@style/AppThemeWithActionBar"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ui.PasswordResetActivity"
-            android:theme="@style/AppThemeWithActionBar"/>
+            android:theme="@style/AppThemeWithActionBar"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ui.MainActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ui.ChatroomActivity"
             android:parentActivityName=".ui.MainActivity"
             android:windowSoftInputMode="adjustResize"
-        android:theme="@style/AppThemeWithActionBar" />
-        <activity android:name=".ui.ChatroomInfoActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeWithActionBar" />
+        <activity android:name=".ui.ChatroomInfoActivity"
+            android:theme="@style/AppThemeWithActionBar"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ui.ChangeUsernameActivity"
-            android:theme="@style/AppThemeWithActionBar"/>
+            android:theme="@style/AppThemeWithActionBar"
+            android:screenOrientation="portrait"/>
         <activity android:name=".ui.ChangePasswordActivity"
-            android:theme="@style/AppThemeWithActionBar"/>
+            android:theme="@style/AppThemeWithActionBar"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
