@@ -76,7 +76,23 @@ public class ChatroomActivity extends AppCompatActivity {
         chat_history = new ArrayList<>();
         mAdapter = new MessageAdapter(chat_history, userName);
         recyclerView.setAdapter(mAdapter);
-        recyclerView.scrollToPosition(chat_history.size() - 1);
+        
+        recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v,
+                                       int left, int top, int right, int bottom,
+                                       int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                if ( bottom < oldBottom) {
+                    recyclerView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+                        }
+                    }, 100);
+                }
+            }
+        });
+
 
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
