@@ -54,22 +54,6 @@ public class JoinedRoomFragment extends Fragment implements JoinedRoomAdapter.On
         joinedRoomKeys = new ArrayList<>();
         joinedRoomAdapter = new JoinedRoomAdapter(joinedRooms, joinedRoomKeys, this);
         recyclerView.setAdapter(joinedRoomAdapter);
-        /*
-        recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-            @Override
-            public void onLayoutChange(View v,
-                                       int left, int top, int right, int bottom,
-                                       int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                if ( bottom < oldBottom) {
-                    recyclerView.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            recyclerView.scrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
-                        }
-                    }, 100);
-                }
-            }
-        });*/
 
         String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
