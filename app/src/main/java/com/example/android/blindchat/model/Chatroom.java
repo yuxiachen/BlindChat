@@ -1,7 +1,6 @@
 package com.example.android.blindchat.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class Chatroom implements Serializable {
     private String id;
